@@ -11,6 +11,7 @@ import ClientOnly from "@/components/client-only";
 import FieldSlider from "@/components/field-slider";
 import { HowItWorksBackground } from "@/components/ui/how-it-works-background";
 import HeroImageSlider from "@/components/hero-image-slider";
+import FieldImageSlider from "@/components/field-image-slider";
 import {
   Calendar,
   Clock,
@@ -56,14 +57,17 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Temukan Arena Mini Soccer Terbaik di Jantung Kota Selong
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
               Batas Kota – The Town Space hadir dengan lapangan mini soccer
               premium yang dirancang untuk memberikan pengalaman bermain
               terbaik.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Field Images Slider */}
+          <FieldImageSlider />
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center mt-3">
             {/* Left Side - Description */}
             <div className="space-y-6">
               <div className="space-y-6">
