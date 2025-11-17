@@ -48,7 +48,7 @@ export default function Navbar() {
               </Link>
             )}
             <Link
-              href="/fields"
+              href="/fields/cmhvrkzu20004cfp06b3xwes8"
               className="px-3 py-2 text-gray-700 hover:text-[#703B3B] hover:bg-[#E1D0B3] hover:bg-opacity-20 rounded-md transition-all duration-200 font-medium"
             >
               Jadwal
@@ -190,7 +190,7 @@ export default function Navbar() {
                 </Link>
               )}
               <Link
-                href="/fields"
+                href="/fields/cmhvrkzu20004cfp06b3xwes8"
                 className="px-4 py-3 text-gray-700 hover:text-[#703B3B] hover:bg-[#E1D0B3] hover:bg-opacity-20 rounded-lg transition-all duration-200 font-medium"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
