@@ -97,10 +97,6 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
   }
 
   const handleSlotClick = (startHour: string) => {
-    if (!session) {
-      return
-    }
-
     if (isSlotBooked(startHour)) {
       return
     }
@@ -108,6 +104,12 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
     // Check if time slot is in the past (not available for booking)
     const hourNumber = parseInt(startHour.split(':')[0])
     if (!isTimeSlotAvailable(selectedDate, hourNumber)) {
+      return
+    }
+
+    if (!session) {
+      // Redirect to login page with return URL
+      router.push(`/login?callbackUrl=${encodeURIComponent(`/fields/${fieldId}`)}`)
       return
     }
 
@@ -200,22 +202,6 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
   const hourlyBookings = getHourlyBookings(selectedDate)
   const pricing = calculatePrice()
 
-  if (!session) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Book This Field</CardTitle>
-        </CardHeader>
-        <CardContent className="text-center py-8">
-          <p className="text-gray-600 mb-4">Please sign in to make a booking</p>
-          <Button asChild>
-            <a href="/login">Sign In</a>
-          </Button>
-        </CardContent>
-      </Card>
-    )
-  }
-
   return (
     <>
       <Card>
@@ -239,6 +225,19 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
+            {/* Sign in reminder for non-logged-in users */}
+            {!session && (
+              <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
+                <div className="flex items-center gap-2 mb-1">
+                  <User className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm font-medium text-blue-900">Sign in required to book</span>
+                </div>
+                <p className="text-xs text-blue-800">
+                  You can view available time slots, but you'll need to sign in to make a booking.
+                </p>
+              </div>
+            )}
+
             {/* Instructions */}
             <div className="bg-blue-50 p-3 rounded-lg">
               <div className="flex items-center gap-2 mb-1">
@@ -270,7 +269,9 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
                       ? 'border-red-200 bg-red-50 cursor-not-allowed opacity-60'
                       : selectedSlots.includes(startHour)
                       ? 'border-emerald-500 bg-emerald-50 hover:bg-emerald-100'
-                      : 'border-dashed border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 cursor-pointer'
+                      : session
+                      ? 'border-dashed border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 cursor-pointer'
+                      : 'border-dashed border-gray-300 bg-white hover:border-blue-50 hover:border-blue-300 cursor-pointer'
                   }`}
                 >
                   <div className="flex flex-col h-full">
@@ -296,10 +297,15 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
                             <CheckCircle className="w-3 h-3 text-emerald-600" />
                             <span className="text-xs text-emerald-600">Selected</span>
                           </>
-                        ) : (
+                        ) : session ? (
                           <>
                             <div className="w-3 h-3 border-2 border-gray-300 rounded-full" />
                             <span className="text-xs text-gray-500">Available</span>
+                          </>
+                        ) : (
+                          <>
+                            <User className="w-3 h-3 text-blue-600" />
+                            <span className="text-xs text-blue-600">Sign in to book</span>
                           </>
                         )}
                       </div>
