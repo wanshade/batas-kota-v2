@@ -41,19 +41,15 @@ export default function FloatingBookingButton() {
       {/* Mobile Floating Button - Bottom Right */}
       <Link
         href="/fields"
-        className={`lg:hidden fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#703B3B] to-[#8B4F4F] hover:from-[#5a2f2f] hover:to-[#7A3F3F] text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center group ${
+        className={`lg:hidden fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#703B3B] to-[#8B4F4F] hover:from-[#5a2f2f] hover:to-[#7A3F3F] text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 items-center justify-center group px-3 py-1 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
-        style={{
-          width: "56px",
-          height: "56px",
-        }}
         aria-label="Pesan Lapangan"
       >
-        <Calendar className="w-6 h-6" />
-        <span className="absolute right-full mr-3 bg-gray-900 text-white text-sm py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-          Pesan Sekarang
-        </span>
+        <div className="flex items-center gap-1.5">
+          <Calendar className="w-4 h-4 flex-shrink-0" />
+          <span className="font-medium text-xs whitespace-nowrap">Booking</span>
+        </div>
       </Link>
 
       {/* Desktop Floating Button - Bottom Right, visible when scrolling */}
@@ -65,7 +61,7 @@ export default function FloatingBookingButton() {
         aria-label="Pesan Lapangan"
       >
         <Calendar className="w-5 h-5" />
-        <span className="font-medium">Pesan Sekarang</span>
+        <span className="font-medium">Booking</span>
       </Link>
     </>
   );
