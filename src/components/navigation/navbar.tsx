@@ -264,20 +264,20 @@ export default function Navbar() {
                   </Button>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Link
                     href="/login"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Button variant="outline" className="w-full">
-                      Sign In
+                      Masuk
                     </Button>
                   </Link>
                   <Link
                     href="/register"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <Button className="w-full">Get Started</Button>
+                    <Button className="w-full">Daftar Sekarang</Button>
                   </Link>
                 </div>
               )}
