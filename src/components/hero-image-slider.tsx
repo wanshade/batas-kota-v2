@@ -115,7 +115,9 @@ export default function HeroImageSlider() {
           {/* Call to Action Buttons - Simplified & Elegant */}
           <div className="flex flex-col sm:flex-row gap-3 mb-12 justify-center">
             <button
-              onClick={() => (window.location.href = "/fields")}
+              onClick={() =>
+                (window.location.href = "/fields/cmhvrkzu20004cfp06b3xwes8")
+              }
               className="px-6 py-3 bg-[#703B3B] hover:bg-[#5a2f2f] text-white font-medium rounded-md
                        transition-all duration-200 text-sm shadow-lg hover:shadow-xl
                        border border-[#703B3B] hover:border-[#5a2f2f]"

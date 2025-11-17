@@ -165,7 +165,7 @@ export default function Footer() {
             {/* Copyright and Made with Love */}
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <p className="text-sm text-gray-400">
-                © 2024 Batas Kota. All rights reserved.
+                © 2025 Batas Kota. All rights reserved.
               </p>
               <div className="flex items-center space-x-2 text-sm text-[#E1D0B3]">
                 <span>Made with</span>
