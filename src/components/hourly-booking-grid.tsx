@@ -117,7 +117,7 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
       if (prev.includes(startHour)) {
         return prev.filter(slot => slot !== startHour)
       } else {
-        return [startHour] // Only allow one 2-hour slot at a time
+        return [...prev, startHour] // Allow multiple slot selection
       }
     })
   }
@@ -149,48 +149,69 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
     setIsCreatingBooking(true)
 
     try {
-      const selectedSlot = selectedSlots[0] // Only one slot for 2-hour booking
-      const startHour = parseInt(selectedSlot.split(':')[0])
-
-      const startTimeString = `${selectedDate}T${selectedSlot}:00`
-      const endTimeString = `${selectedDate}T${(startHour + 2).toString().padStart(2, '0')}:00`
-
-      const startTime = new Date(startTimeString)
-      const endTime = new Date(endTimeString)
-
       const pricing = calculatePrice()
+      const bookingPromises = []
+      const bookingDetailsList = []
 
-      const response = await fetch("/api/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fieldId,
-          date: selectedDate,
-          startTime: startTime.toISOString(),
-          endTime: endTime.toISOString(),
-          paymentType,
-          amountPaid: pricing.deposit || pricing.total
-        }),
-      })
+      // Create a booking for each selected slot
+      for (const selectedSlot of selectedSlots.sort()) {
+        const startHour = parseInt(selectedSlot.split(':')[0])
 
-      const data = await response.json()
+        const startTimeString = `${selectedDate}T${selectedSlot}:00`
+        const endTimeString = `${selectedDate}T${(startHour + 2).toString().padStart(2, '0')}:00`
 
-      if (!response.ok) {
-        alert(data.error || "Failed to create booking")
-      } else {
-        setBookingDetails({
-          fieldName,
-          date: selectedDate,
-          startTime: startTime.toISOString(),
-          endTime: endTime.toISOString(),
-          amount: pricing.deposit || pricing.total,
-          paymentType
+        const startTime = new Date(startTimeString)
+        const endTime = new Date(endTimeString)
+
+        const bookingPromise = fetch("/api/bookings", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fieldId,
+            date: selectedDate,
+            startTime: startTime.toISOString(),
+            endTime: endTime.toISOString(),
+            paymentType,
+            amountPaid: (pricing.deposit || pricing.total) / selectedSlots.length // Divide amount across slots
+          }),
         })
-        setShowSuccessModal(true)
-        setSelectedSlots([])
+
+        bookingPromises.push(bookingPromise)
+        bookingDetailsList.push({
+          startTime: startTime.toISOString(),
+          endTime: endTime.toISOString()
+        })
       }
+
+      // Execute all bookings in parallel
+      const responses = await Promise.all(bookingPromises)
+
+      // Check if all bookings were successful
+      const failedBookings = responses.filter(response => !response.ok)
+
+      if (failedBookings.length > 0) {
+        // Get error messages from failed bookings
+        const errorPromises = failedBookings.map(response => response.json())
+        const errors = await Promise.all(errorPromises)
+        const errorMessages = errors.map(err => err.error || "Booking failed")
+        alert(`Some bookings failed: ${errorMessages.join(", ")}`)
+        return
+      }
+
+      // All bookings successful
+      setBookingDetails({
+        fieldName,
+        date: selectedDate,
+        startTime: bookingDetailsList[0].startTime,
+        endTime: bookingDetailsList[bookingDetailsList.length - 1].endTime,
+        amount: pricing.deposit || pricing.total,
+        paymentType,
+        slotCount: selectedSlots.length
+      })
+      setShowSuccessModal(true)
+      setSelectedSlots([])
     } catch (error) {
       console.error("Booking error:", error)
       alert(`Error: ${error instanceof Error ? error.message : "Something went wrong. Please try again."}`)
@@ -246,8 +267,8 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
               </div>
               <ol className="text-xs text-blue-800 space-y-1 ml-6">
                 <li>1. Select your preferred date</li>
-                <li>2. Click on available 2-hour time slots (green)</li>
-                <li>3. Choose payment type and book</li>
+                <li>2. Click on multiple available 2-hour time slots (green)</li>
+                <li>3. Choose payment type and book all selected slots</li>
               </ol>
             </div>
 
@@ -321,7 +342,7 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
               <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-200">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium text-emerald-900">
-                    Selected Time Slots:
+                    Selected {selectedSlots.length > 1 ? 'Time Slots' : 'Time Slot'}:
                   </span>
                   <button
                     onClick={() => setSelectedSlots([])}
@@ -403,6 +424,7 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
           endTime={bookingDetails.endTime}
           amount={bookingDetails.amount}
           paymentType={bookingDetails.paymentType}
+          slotCount={bookingDetails.slotCount}
         />
       )}
     </>

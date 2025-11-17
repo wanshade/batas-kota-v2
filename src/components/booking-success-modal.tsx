@@ -22,6 +22,7 @@ interface BookingSuccessModalProps {
   endTime: string
   amount: number
   paymentType: string
+  slotCount?: number
 }
 
 export default function BookingSuccessModal({
@@ -32,7 +33,8 @@ export default function BookingSuccessModal({
   startTime,
   endTime,
   amount,
-  paymentType
+  paymentType,
+  slotCount = 1
 }: BookingSuccessModalProps) {
   useEffect(() => {
     if (isOpen) {
@@ -112,10 +114,13 @@ export default function BookingSuccessModal({
             <CheckCircle2 className="w-8 h-8 text-green-600" />
           </div>
           <DialogTitle className="text-2xl font-bold text-green-900">
-            🏟️ Booking Confirmed!
+            🏟️ {slotCount > 1 ? `${slotCount} Bookings Confirmed!` : 'Booking Confirmed!'}
           </DialogTitle>
           <DialogDescription className="text-gray-600 text-base">
-            Your soccer field booking has been successfully created. Get ready for an amazing game!
+            {slotCount > 1
+              ? `Your ${slotCount} time slot bookings have been successfully created. Get ready for multiple amazing games!`
+              : 'Your soccer field booking has been successfully created. Get ready for an amazing game!'
+            }
           </DialogDescription>
         </DialogHeader>
 
@@ -127,7 +132,7 @@ export default function BookingSuccessModal({
           </div>
 
           {/* Booking Details */}
-          <div className="grid grid-cols-3 gap-4 text-center">
+          <div className={`grid gap-4 text-center ${slotCount > 1 ? 'grid-cols-4' : 'grid-cols-3'}`}>
             <div className="bg-blue-50 rounded-lg p-3">
               <Calendar className="w-6 h-6 text-blue-600 mx-auto mb-2" />
               <div className="text-xs text-gray-600">Date</div>
@@ -142,6 +147,17 @@ export default function BookingSuccessModal({
                 {formatTime(startTime)} - {formatTime(endTime)}
               </div>
             </div>
+            {slotCount > 1 && (
+              <div className="bg-emerald-50 rounded-lg p-3">
+                <div className="w-6 h-6 bg-emerald-600 rounded-full mx-auto mb-2 flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">{slotCount}</span>
+                </div>
+                <div className="text-xs text-gray-600">Slots</div>
+                <div className="font-semibold text-gray-900 text-sm">
+                  {slotCount} × 2hr
+                </div>
+              </div>
+            )}
             <div className="bg-yellow-50 rounded-lg p-3">
               <DollarSign className="w-6 h-6 text-yellow-600 mx-auto mb-2" />
               <div className="text-xs text-gray-600">Amount</div>
