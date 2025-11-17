@@ -5,6 +5,7 @@ import { Providers } from "@/components/providers/session-provider";
 import ConditionalNavbar from "@/components/layout/conditional-navbar";
 import ConditionalFooter from "@/components/layout/conditional-footer";
 import ClientOnly from "@/components/client-only";
+import FloatingBookingButton from "@/components/ui/floating-booking-button";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,6 +57,9 @@ export default function RootLayout({
           </main>
           <ClientOnly fallback={<footer className="h-64 bg-gray-50 border-t"></footer>}>
             <ConditionalFooter />
+          </ClientOnly>
+          <ClientOnly fallback={<div></div>}>
+            <FloatingBookingButton />
           </ClientOnly>
         </Providers>
       </body>
