@@ -18,16 +18,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Batas Kota - Mini Soccer Field Booking",
-  description: "Book professional mini soccer fields online with Batas Kota. Easy reservations, secure payments, and quality facilities.",
+  title: "Batas Kota - The Town Space",
+  description:
+    "Batas Kota – The Town Space hadir dengan lapangan mini soccer premium yang dirancang untuk memberikan pengalaman bermain terbaik.",
   icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-    ],
+    icon: [{ url: "/favicon.ico", sizes: "any" }],
     shortcut: "/favicon.ico",
-    apple: [
-      { url: "/favicon.ico", sizes: "any" },
-    ],
+    apple: [{ url: "/favicon.ico", sizes: "any" }],
   },
 };
 
@@ -43,19 +40,25 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <Providers>
-          <ClientOnly fallback={<header className="h-16 bg-white border-b"></header>}>
+          <ClientOnly
+            fallback={<header className="h-16 bg-white border-b"></header>}
+          >
             <ConditionalNavbar />
           </ClientOnly>
           <main className="flex-1">
-            <ClientOnly fallback={
-              <div className="flex items-center justify-center h-96">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-              </div>
-            }>
+            <ClientOnly
+              fallback={
+                <div className="flex items-center justify-center h-96">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                </div>
+              }
+            >
               {children}
             </ClientOnly>
           </main>
-          <ClientOnly fallback={<footer className="h-64 bg-gray-50 border-t"></footer>}>
+          <ClientOnly
+            fallback={<footer className="h-64 bg-gray-50 border-t"></footer>}
+          >
             <ConditionalFooter />
           </ClientOnly>
           <ClientOnly fallback={<div></div>}>
