@@ -1,11 +1,13 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { ArrowLeft, Mail, Phone, MapPin, Clock, MessageSquare } from "lucide-react"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -32,7 +34,7 @@ export default function ContactPage() {
       // For now, we'll just simulate a successful submission
       await new Promise(resolve => setTimeout(resolve, 1000))
 
-      setSubmitMessage("Thank you for your message! We'll get back to you within 24 hours.")
+      setSubmitMessage("Terima kasih atas pesan Anda! Kami akan menghubungi Anda dalam 24 jam.")
       setFormData({
         name: "",
         email: "",
@@ -41,224 +43,251 @@ export default function ContactPage() {
         message: ""
       })
     } catch (error) {
-      setSubmitMessage("Something went wrong. Please try again later.")
+    setSubmitMessage("Terjadi kesalahan. Silakan coba lagi nanti.")
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      {/* Header */}
-      <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Have questions about our booking system? Want to partner with us? We'd love to hear from you!
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-[#EFE9E3] to-[#E1D0B3]">
+      <div className="container mx-auto px-4 py-16">
+        {/* Back Button */}
+        <Link
+          href="/"
+          className="inline-flex items-center text-orange-600 hover:text-orange-800 mb-8 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Home
+        </Link>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        {/* Contact Form */}
-        <div className="lg:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Send us a Message</CardTitle>
-              <CardDescription>
-                Fill out the form below and we'll get back to you as soon as possible
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Full Name *</Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      required
-                      placeholder="John Doe"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      required
-                      placeholder="john@example.com"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
-                      placeholder="+1 (555) 123-4567"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="subject">Subject *</Label>
-                    <Input
-                      id="subject"
-                      value={formData.subject}
-                      onChange={(e) => handleInputChange("subject", e.target.value)}
-                      required
-                      placeholder="General Inquiry"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message *</Label>
-                  <Textarea
-                    id="message"
-                    value={formData.message}
-                    onChange={(e) => handleInputChange("message", e.target.value)}
-                    required
-                    rows={6}
-                    placeholder="Tell us how we can help you..."
-                  />
-                </div>
-
-                {submitMessage && (
-                  <div className={`p-4 rounded-lg ${
-                    submitMessage.includes("Thank you")
-                      ? "bg-green-50 text-green-800 border border-green-200"
-                      : "bg-red-50 text-red-800 border border-red-200"
-                  }`}>
-                    {submitMessage}
-                  </div>
-                )}
-
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">Hubungi Kami</h1>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+            Punya pertanyaan tentang sistem booking? Ingin bekerjasama dengan kami?
+            Kami senang mendengar dari Anda!
+          </p>
         </div>
 
-        {/* Contact Information */}
-        <div className="space-y-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                </svg>
-                <span>Email Us</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div>
-                <p className="font-medium">General Inquiries</p>
-                <a href="mailto:info@soccerfieldbooking.com" className="text-green-600 hover:text-green-700">
-                  info@soccerfieldbooking.com
-                </a>
-              </div>
-              <div>
-                <p className="font-medium">Support</p>
-                <a href="mailto:support@soccerfieldbooking.com" className="text-green-600 hover:text-green-700">
-                  support@soccerfieldbooking.com
-                </a>
-              </div>
-              <div>
-                <p className="font-medium">Partnerships</p>
-                <a href="mailto:partners@soccerfieldbooking.com" className="text-green-600 hover:text-green-700">
-                  partners@soccerfieldbooking.com
-                </a>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Contact Form */}
+          <div className="lg:col-span-2">
+            <Card className="bg-white/90 backdrop-blur-sm border-[#E1D0B3]/20 shadow-xl">
+              <CardHeader>
+                <CardTitle className="text-2xl font-bold text-[#703B3B] flex items-center gap-2">
+                  <MessageSquare className="h-6 w-6 text-[#703B3B]" />
+                  Kirim Pesan
+                </CardTitle>
+                <CardDescription className="text-gray-700">
+                  Isi form di bawah ini dan kami akan segera merespon Anda
+                </CardDescription>
+              </CardHeader>
+            <CardContent className="p-8">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="text-gray-700 font-medium">Nama Lengkap *</Label>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        required
+                        placeholder="Masukkan nama lengkap Anda"
+                        className="border-[#E1D0B3]/30 focus:border-[#703B3B]"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-gray-700 font-medium">Email *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        required
+                        placeholder="email@example.com"
+                        className="border-[#E1D0B3]/30 focus:border-[#703B3B]"
+                      />
+                    </div>
+                  </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                </svg>
-                <span>Call Us</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div>
-                <p className="font-medium">Customer Support</p>
-                <a href="tel:+15551234567" className="text-green-600 hover:text-green-700">
-                  +1 (555) 123-4567
-                </a>
-                <p className="text-sm text-gray-600">Mon-Fri: 9AM - 6PM EST</p>
-              </div>
-              <div>
-                <p className="font-medium">Emergency Support</p>
-                <a href="tel:+15559876543" className="text-green-600 hover:text-green-700">
-                  +1 (555) 987-6543
-                </a>
-                <p className="text-sm text-gray-600">24/7 for booking issues</p>
-              </div>
-            </CardContent>
-          </Card>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-gray-700 font-medium">Nomor Telepon</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => handleInputChange("phone", e.target.value)}
+                        placeholder="+62 812-3456-7890"
+                        className="border-[#E1D0B3]/30 focus:border-[#703B3B]"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="subject" className="text-gray-700 font-medium">Subjek *</Label>
+                      <Input
+                        id="subject"
+                        value={formData.subject}
+                        onChange={(e) => handleInputChange("subject", e.target.value)}
+                        required
+                        placeholder="Pertanyaan Umum"
+                        className="border-[#E1D0B3]/30 focus:border-[#703B3B]"
+                      />
+                    </div>
+                  </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                </svg>
-                <span>Office Location</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div>
-                <p className="font-medium">Batas Kota HQ</p>
-                <p className="text-gray-600">123 Soccer Street</p>
-                <p className="text-gray-600">Sport City, SC 12345</p>
-                <p className="text-gray-600">United States</p>
-              </div>
-              <div>
-                <p className="font-medium mb-2">Office Hours</p>
-                <p className="text-sm text-gray-600">Monday - Friday: 9AM - 6PM</p>
-                <p className="text-sm text-gray-600">Saturday: 10AM - 4PM</p>
-                <p className="text-sm text-gray-600">Sunday: Closed</p>
-              </div>
-            </CardContent>
-          </Card>
+                  <div className="space-y-2">
+                    <Label htmlFor="message" className="text-gray-700 font-medium">Pesan *</Label>
+                    <Textarea
+                      id="message"
+                      value={formData.message}
+                      onChange={(e) => handleInputChange("message", e.target.value)}
+                      required
+                      rows={6}
+                      placeholder="Ceritakan bagaimana kami bisa membantu Anda..."
+                      className="border-[#E1D0B3]/30 focus:border-[#703B3B]"
+                    />
+                  </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
-                  <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
-                </svg>
-                <span>Quick Response</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Email Response</span>
-                  <span className="text-sm font-medium text-green-600">Within 24 hours</span>
+                  {submitMessage && (
+                    <div className={`p-4 rounded-lg ${
+                      submitMessage.includes("Terima kasih")
+                        ? "bg-green-50 text-green-800 border border-green-200"
+                        : "bg-red-50 text-red-800 border border-red-200"
+                    }`}>
+                      {submitMessage}
+                    </div>
+                  )}
+
+                  <Button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-[#703B3B] to-[#8B4F4F] hover:from-[#5a2f2f] hover:to-[#7A3F3F] text-white font-semibold py-3"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Mengirim..." : "Kirim Pesan"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Contact Information */}
+          <div className="space-y-6">
+            {/* Email Card */}
+            <Card className="bg-white/90 backdrop-blur-sm border-[#E1D0B3]/20 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-[#703B3B]">
+                  <div className="bg-[#703B3B]/10 p-2 rounded-lg">
+                    <Mail className="h-5 w-5 text-[#703B3B]" />
+                  </div>
+                  Email Kami
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="font-medium text-gray-900 mb-1">Info Umum</p>
+                  <a href="mailto:info@bataskota.com" className="text-[#703B3B] hover:text-[#5a2f2f] transition-colors">
+                    info@bataskota.com
+                  </a>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Phone Response</span>
-                  <span className="text-sm font-medium text-green-600">Within 2 hours</span>
+                <div>
+                  <p className="font-medium text-gray-900 mb-1">Dukungan</p>
+                  <a href="mailto:support@bataskota.com" className="text-[#703B3B] hover:text-[#5a2f2f] transition-colors">
+                    support@bataskota.com
+                  </a>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Live Chat</span>
-                  <span className="text-sm font-medium text-green-600">Coming Soon</span>
+                <div>
+                  <p className="font-medium text-gray-900 mb-1">Kerjasama</p>
+                  <a href="mailto:partners@bataskota.com" className="text-[#703B3B] hover:text-[#5a2f2f] transition-colors">
+                    partners@bataskota.com
+                  </a>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+
+            {/* Phone Card */}
+            <Card className="bg-white/90 backdrop-blur-sm border-[#E1D0B3]/20 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-[#703B3B]">
+                  <div className="bg-[#703B3B]/10 p-2 rounded-lg">
+                    <Phone className="h-5 w-5 text-[#703B3B]" />
+                  </div>
+                  Hubungi Kami
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="font-medium text-gray-900 mb-1">Customer Support</p>
+                  <a href="tel:+622112345678" className="text-[#703B3B] hover:text-[#5a2f2f] transition-colors">
+                    +62 21 1234 5678
+                  </a>
+                  <p className="text-sm text-gray-600">Sen-Jum: 08:00 - 20:00 WITA</p>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900 mb-1">WhatsApp</p>
+                  <a href="https://wa.me/628123456789" className="text-[#703B3B] hover:text-[#5a2f2f] transition-colors">
+                    +62 812-3456-7890
+                  </a>
+                  <p className="text-sm text-gray-600">24/7 untuk booking darurat</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Location Card */}
+            <Card className="bg-white/90 backdrop-blur-sm border-[#E1D0B3]/20 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-[#703B3B]">
+                  <div className="bg-[#703B3B]/10 p-2 rounded-lg">
+                    <MapPin className="h-5 w-5 text-[#703B3B]" />
+                  </div>
+                  Lokasi Kami
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="font-medium text-gray-900 mb-2">Batas Kota - The Town Space</p>
+                  <p className="text-gray-700">Jl. Soccer No. 123</p>
+                  <p className="text-gray-700">Selong, Lombok Timur</p>
+                  <p className="text-gray-700">NTB 83611, Indonesia</p>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900 mb-2">Jam Operasional</p>
+                  <p className="text-sm text-gray-700 flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-[#703B3B]" />
+                    24 jam setiap hari
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Response Time Card */}
+            <Card className="bg-gradient-to-br from-[#703B3B]/10 to-[#8B4F4F]/10 border-[#E1D0B3]/30 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-[#703B3B]">
+                  <div className="bg-[#703B3B]/20 p-2 rounded-lg">
+                    <MessageSquare className="h-5 w-5 text-[#703B3B]" />
+                  </div>
+                  Waktu Respon
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-700">Email</span>
+                    <span className="text-sm font-semibold text-[#703B3B]">Maks. 24 jam</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-700">Telepon</span>
+                    <span className="text-sm font-semibold text-[#703B3B]">Maks. 2 jam</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-700">WhatsApp</span>
+                    <span className="text-sm font-semibold text-[#703B3B]">Langsung</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
