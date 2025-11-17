@@ -69,26 +69,26 @@ export default function HeroImageSlider() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70"></div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
 
-      {/* CTA Content - Left Aligned */}
-      <div className="absolute inset-0 flex items-center justify-start text-white z-50 px-4 sm:px-8 lg:px-16">
-        <div className="max-w-3xl w-full">
-          {/* Main Title - Left Aligned */}
+      {/* CTA Content - Centered on all devices */}
+      <div className="absolute inset-0 flex items-center justify-center text-white z-50 px-4">
+        <div className="max-w-4xl w-full text-center">
+          {/* Main Title - Centered on all devices */}
           <div className="mb-8">
-            {/* Logo - visible on mobile, centered above text, hidden on larger screens */}
-            <div className="mb-4 sm:hidden flex justify-center">
+            {/* Logo - centered on all devices, larger on tablet and desktop */}
+            <div className="mb-6 flex justify-center">
               <img
                 src="/logo.png"
                 alt="Batas Kota Logo"
-                className="h-16 w-auto object-contain"
+                className="h-20 sm:h-24 lg:h-32 w-auto object-contain"
               />
             </div>
             <h1
               className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-3 tracking-tight
-                         text-white drop-shadow-xl text-center sm:text-left"
+                         text-white drop-shadow-xl text-center"
             >
               Batas Kota
             </h1>
-            <div className="flex items-center justify-center sm:justify-start gap-3">
+            <div className="flex items-center justify-center gap-3">
               <div className="w-8 h-0.5 bg-gradient-to-r from-[#703B3B] to-[#E1D0B3]"></div>
               <h2
                 className="text-lg sm:text-xl lg:text-2xl font-light tracking-wide
@@ -103,7 +103,7 @@ export default function HeroImageSlider() {
           <div className="mb-8">
             <p
               className="text-lg sm:text-xl lg:text-2xl font-semibold leading-relaxed
-                       text-white/95 max-w-lg"
+                       text-white/95 mx-auto"
             >
               Rasakan Serunya Bermain di
               <span className="block text-[#E1D0B3] font-bold mt-1">
@@ -113,7 +113,7 @@ export default function HeroImageSlider() {
           </div>
 
           {/* Call to Action Buttons - Simplified & Elegant */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-12">
+          <div className="flex flex-col sm:flex-row gap-3 mb-12 justify-center">
             <button
               onClick={() => (window.location.href = "/fields")}
               className="px-6 py-3 bg-[#703B3B] hover:bg-[#5a2f2f] text-white font-medium rounded-md
