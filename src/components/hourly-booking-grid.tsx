@@ -228,7 +228,7 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Book This Field</CardTitle>
+            <CardTitle>Pesan Lapangan Ini</CardTitle>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-gray-500" />
               <input
@@ -251,10 +251,10 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
               <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
                 <div className="flex items-center gap-2 mb-1">
                   <User className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm font-medium text-blue-900">Sign in required to book</span>
+                  <span className="text-sm font-medium text-blue-900">Masuk untuk melakukan pemesanan</span>
                 </div>
                 <p className="text-xs text-blue-800">
-                  You can view available time slots, but you'll need to sign in to make a booking.
+                  Anda dapat melihat slot waktu yang tersedia, tetapi perlu masuk untuk melakukan pemesanan.
                 </p>
               </div>
             )}
@@ -263,12 +263,12 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
             <div className="bg-blue-50 p-3 rounded-lg">
               <div className="flex items-center gap-2 mb-1">
                 <AlertCircle className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-medium text-blue-900">How to book:</span>
+                <span className="text-sm font-medium text-blue-900">Cara memesan:</span>
               </div>
               <ol className="text-xs text-blue-800 space-y-1 ml-6">
-                <li>1. Select your preferred date</li>
-                <li>2. Click on multiple available 2-hour time slots (green)</li>
-                <li>3. Choose payment type and book all selected slots</li>
+                <li>1. Pilih tanggal yang diinginkan</li>
+                <li>2. Klik pada beberapa slot waktu 2 jam yang tersedia (hijau)</li>
+                <li>3. Pilih jenis pembayaran dan pesan semua slot yang dipilih</li>
               </ol>
             </div>
 
@@ -305,28 +305,28 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
 
                     {booking ? (
                       <div className="flex-1 flex items-center justify-center">
-                        <span className="text-sm font-medium text-red-600">Not Avail</span>
+                        <span className="text-sm font-medium text-red-600">Tidak Tersedia</span>
                       </div>
                     ) : isPastTime ? (
                       <div className="flex-1 flex items-center justify-center">
-                        <span className="text-sm font-medium text-red-600">Passed</span>
+                        <span className="text-sm font-medium text-red-600">Terlewat</span>
                       </div>
                     ) : (
                       <div className="flex-1 flex items-center gap-1">
                         {selectedSlots.includes(startHour) ? (
                           <>
                             <CheckCircle className="w-3 h-3 text-emerald-600" />
-                            <span className="text-xs text-emerald-600">Selected</span>
+                            <span className="text-xs text-emerald-600">Dipilih</span>
                           </>
                         ) : session ? (
                           <>
                             <div className="w-3 h-3 border-2 border-gray-300 rounded-full" />
-                            <span className="text-xs text-gray-500">Available</span>
+                            <span className="text-xs text-gray-500">Tersedia</span>
                           </>
                         ) : (
                           <>
                             <User className="w-3 h-3 text-blue-600" />
-                            <span className="text-xs text-blue-600">Sign in to book</span>
+                            <span className="text-xs text-blue-600">Masuk untuk pesan</span>
                           </>
                         )}
                       </div>
@@ -342,13 +342,13 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
               <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-200">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium text-emerald-900">
-                    Selected {selectedSlots.length > 1 ? 'Time Slots' : 'Time Slot'}:
+                    {selectedSlots.length > 1 ? 'Slot Waktu yang Dipilih' : 'Slot Waktu yang Dipilih'}:
                   </span>
                   <button
                     onClick={() => setSelectedSlots([])}
                     className="text-gray-500 hover:text-gray-700 text-sm"
                   >
-                    Clear
+                    Hapus
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-1 mb-3">
@@ -359,7 +359,7 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
                   ))}
                 </div>
                 <div className="text-sm text-emerald-700">
-                  Duration: {selectedSlots.length * 2} hour{selectedSlots.length * 2 > 1 ? 's' : ''}
+                  Durasi: {selectedSlots.length * 2} jam
                 </div>
               </div>
             )}
@@ -367,17 +367,17 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
             {/* Payment Type Selection */}
             {selectedSlots.length > 0 && (
               <div className="space-y-2">
-                <label className="text-sm font-medium">Payment Type</label>
+                <label className="text-sm font-medium">Jenis Pembayaran</label>
                 <Select value={paymentType} onValueChange={setPaymentType}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="FULL">
-                      Full Payment ({formatRupiah(pricing.total)})
+                      Pembayaran Penuh ({formatRupiah(pricing.total)})
                     </SelectItem>
                     <SelectItem value="DEPOSIT">
-                      Deposit ({formatRupiah(pricing.deposit)}) - Pay {formatRupiah(pricing.remaining)} on-site
+                      Uang Muka ({formatRupiah(pricing.deposit)}) - Bayar {formatRupiah(pricing.remaining)} di lokasi
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -395,7 +395,7 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
                 </div>
                 {paymentType === "DEPOSIT" && (
                   <p className="text-sm text-gray-600">
-                    Remaining {formatRupiah(pricing.remaining)} to be paid on-site
+                    Sisa {formatRupiah(pricing.remaining)} akan dibayar di lokasi
                   </p>
                 )}
                 <Button
@@ -403,7 +403,7 @@ export default function HourlyBookingGrid({ fieldId, fieldName, pricePerHour, ex
                   disabled={isCreatingBooking || selectedSlots.length === 0}
                   className="w-full"
                 >
-                  {isCreatingBooking ? "Creating Booking..." : "Book Now"}
+                  {isCreatingBooking ? "Membuat Pemesanan..." : "Pesan Sekarang"}
                 </Button>
               </div>
             )}

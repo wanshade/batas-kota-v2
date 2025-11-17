@@ -92,31 +92,31 @@ export default async function FieldDetailPage({
             <CardTitle className="mb-4 text-2xl">{field.name}</CardTitle>
             <CardDescription className="text-lg mb-6">
               {field.description ||
-                "Professional mini soccer field with quality turf, lighting, and facilities. Perfect for training sessions and friendly matches."}
+                "Lapangan mini soccer profesional dengan rumput berkualitas, pencahayaan, dan fasilitas lengkap. Sempurna untuk sesi latihan dan pertandingan persahabatan."}
             </CardDescription>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="text-sm text-gray-600 mb-1">Price per hour</div>
+                <div className="text-sm text-gray-600 mb-1">Harga per jam</div>
                 <div className="text-2xl font-bold text-green-600">
                   {formatRupiah(field.pricePerHour)}
                 </div>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="text-sm text-gray-600 mb-1">Field type</div>
+                <div className="text-sm text-gray-600 mb-1">Tipe lapangan</div>
                 <div className="text-lg font-semibold">Mini Soccer</div>
               </div>
             </div>
 
             <div className="border-t pt-6 mb-6">
-              <h3 className="font-semibold mb-3">Facilities</h3>
+              <h3 className="font-semibold mb-3">Fasilitas</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm text-gray-600">
-                <div>• Professional turf</div>
-                <div>• Flood lighting</div>
-                <div>• Changing rooms</div>
-                <div>• Parking available</div>
-                <div>• Water fountain</div>
-                <div>• First aid kit</div>
+                <div>• Rumput profesional</div>
+                <div>• Pencahayaan lampu</div>
+                <div>• Ruang ganti</div>
+                <div>• Area parkir</div>
+                <div>• Air minum</div>
+                <div>• P3K</div>
               </div>
             </div>
 
