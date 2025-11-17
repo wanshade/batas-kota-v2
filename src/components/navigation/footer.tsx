@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12">
         {/* Main Grid Layout */}
         <div
-          className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-12"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-12"
           suppressHydrationWarning={true}
         >
           {/* Brand Section - Span 2 columns on large screens */}
@@ -74,79 +74,6 @@ export default function Footer() {
                 </svg>
               </a>
             </div>
-          </div>
-
-          {/* Navigation Columns with Enhanced Design */}
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="h-1 w-6 bg-[#E1D0B3] rounded"></div>
-              <h3 className="text-lg font-semibold text-white">Navigation</h3>
-            </div>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/fields"
-                  className="flex items-center group text-gray-300 hover:text-[#E1D0B3] transition-all duration-200"
-                >
-                  <svg
-                    className="h-4 w-4 mr-2 text-gray-500 group-hover:text-[#E1D0B3] transition-colors"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                    />
-                  </svg>
-                  Browse Fields
-                </Link>
-              </li>
-                <li>
-                <Link
-                  href="/contact"
-                  className="flex items-center group text-gray-300 hover:text-[#E1D0B3] transition-all duration-200"
-                >
-                  <svg
-                    className="h-4 w-4 mr-2 text-gray-500 group-hover:text-[#E1D0B3] transition-colors"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/cafe"
-                  className="flex items-center group text-gray-300 hover:text-[#E1D0B3] transition-all duration-200"
-                >
-                  <svg
-                    className="h-4 w-4 mr-2 text-gray-500 group-hover:text-[#E1D0B3] transition-colors"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 3h18v18H3zM12 8v4m0 4h.01"
-                    />
-                  </svg>
-                  Cafe
-                </Link>
-              </li>
-            </ul>
           </div>
 
           {/* Contact Section with Enhanced Design */}
