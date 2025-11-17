@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { signIn, useSession, getSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -24,6 +24,7 @@ import {
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { data: session, status } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
@@ -35,6 +36,9 @@ export default function LoginPage() {
     password: ""
   })
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Get callbackUrl from search params, fallback to null
+  const callbackUrl = searchParams?.get('callbackUrl')
 
   // Countdown timer effect
   useEffect(() => {
@@ -63,19 +67,28 @@ export default function LoginPage() {
     }
   }, [showSuccessModal])
 
-  // Helper functions to determine modal content and routing based on user role
+  // Helper functions to determine modal content and routing based on user role and callback
   const getModalContent = () => {
     const isAdmin = session?.user?.role === "ADMIN"
+    const hasCallbackUrl = callbackUrl && callbackUrl !== "/admin" && callbackUrl !== "/dashboard"
+
     return {
-      title: isAdmin ? "🎯 Admin Access Granted!" : "🎉 Welcome Back!",
-      message: isAdmin
+      title: isAdmin && !hasCallbackUrl ? "🎯 Admin Access Granted!" : "🎉 Welcome Back!",
+      message: hasCallbackUrl
+        ? "Great to see you again! You'll be redirected back to complete your booking."
+        : isAdmin
         ? "Welcome back, Administrator! You now have access to manage the entire soccer field booking system."
         : "Great to see you again! You've successfully logged in and are ready to book your next soccer field.",
-      buttonText: isAdmin ? "Go to Admin Dashboard" : "Go to Dashboard"
+      buttonText: hasCallbackUrl ? "Continue to Booking" : (isAdmin ? "Go to Admin Dashboard" : "Go to Dashboard")
     }
   }
 
   const getRedirectPath = () => {
+    // If there's a callbackUrl, use it
+    if (callbackUrl) {
+      return callbackUrl
+    }
+    // Otherwise, redirect based on user role
     return session?.user?.role === "ADMIN" ? "/admin" : "/dashboard"
   }
 
@@ -93,6 +106,7 @@ export default function LoginPage() {
         email: formData.email,
         password: formData.password,
         redirect: false,
+        callbackUrl: callbackUrl || undefined,
       })
 
       if (result?.error) {
