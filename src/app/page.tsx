@@ -19,7 +19,6 @@ import {
   Shield,
   CreditCard,
   CheckCircle,
-  Star,
   Trophy,
   Target,
   ChevronRight,
@@ -174,74 +173,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-20 bg-gradient-to-br from-[#EFE9E3] to-[#E1D0B3]">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              What Players Are Saying
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Join thousands of satisfied players who trust Batas Kota for their
-              field booking needs.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Ahmad Rahman",
-                role: "Team Captain, Jakarta United",
-                content:
-                  "Batas Kota has completely changed how we organize our weekly matches. The booking process is seamless and we never have to worry about field availability anymore.",
-                rating: 5,
-              },
-              {
-                name: "Sarah Wijaya",
-                role: "Weekend Player",
-                content:
-                  "As someone who plays casually, I love how easy it is to find and book fields. The quality is always excellent and the prices are reasonable.",
-                rating: 5,
-              },
-              {
-                name: "Michael Chen",
-                role: "Tournament Organizer",
-                content:
-                  "Organizing tournaments used to be a nightmare. With Batas Kota, I can book multiple fields simultaneously and manage everything from one dashboard.",
-                rating: 5,
-              },
-            ].map((testimonial, index) => (
-              <Card key={index} className="bg-white border-0 shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-1 mb-4">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star
-                        key={i}
-                        className="h-5 w-5 text-yellow-400 fill-current"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-gray-700 mb-6 italic">
-                    "{testimonial.content}"
-                  </p>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-                    <div>
-                      <div className="font-semibold text-gray-900">
-                        {testimonial.name}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {testimonial.role}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-      {/* Location Section */}
+        {/* Location Section */}
       <section className="py-20 bg-gradient-to-tr from-[#E1D0B3] via-[#EFE9E3] to-[#F5F0E8] relative overflow-hidden">
         <HowItWorksBackground />
         <div className="container mx-auto px-6 relative z-10">

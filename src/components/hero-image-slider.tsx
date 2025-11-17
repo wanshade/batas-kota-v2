@@ -74,13 +74,21 @@ export default function HeroImageSlider() {
         <div className="max-w-3xl w-full">
           {/* Main Title - Left Aligned */}
           <div className="mb-8">
+            {/* Logo - visible on mobile, centered above text, hidden on larger screens */}
+            <div className="mb-4 sm:hidden flex justify-center">
+              <img
+                src="/logo.png"
+                alt="Batas Kota Logo"
+                className="h-16 w-auto object-contain"
+              />
+            </div>
             <h1
               className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-3 tracking-tight
-                         text-white drop-shadow-xl"
+                         text-white drop-shadow-xl text-center sm:text-left"
             >
               Batas Kota
             </h1>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center sm:justify-start gap-3">
               <div className="w-8 h-0.5 bg-gradient-to-r from-[#703B3B] to-[#E1D0B3]"></div>
               <h2
                 className="text-lg sm:text-xl lg:text-2xl font-light tracking-wide
