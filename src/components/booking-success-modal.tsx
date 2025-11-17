@@ -92,12 +92,14 @@ export default function BookingSuccessModal({
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const date = new Date(dateString)
+    const options: Intl.DateTimeFormatOptions = {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    })
+    }
+    return date.toLocaleDateString('id-ID', options)
   }
 
   const handleViewBookings = () => {
@@ -114,12 +116,12 @@ export default function BookingSuccessModal({
             <CheckCircle2 className="w-8 h-8 text-green-600" />
           </div>
           <DialogTitle className="text-2xl font-bold text-green-900">
-            🏟️ {slotCount > 1 ? `${slotCount} Bookings Confirmed!` : 'Booking Confirmed!'}
+            🏟️ {slotCount > 1 ? `${slotCount} Pemesanan Dikonfirmasi!` : 'Pemesanan Dikonfirmasi!'}
           </DialogTitle>
           <DialogDescription className="text-gray-600 text-base">
             {slotCount > 1
-              ? `Your ${slotCount} time slot bookings have been successfully created. Get ready for multiple amazing games!`
-              : 'Your soccer field booking has been successfully created. Get ready for an amazing game!'
+              ? `${slotCount} slot waktu pemesanan Anda telah berhasil dibuat. Siapkan diri untuk beberapa pertandingan seru!`
+              : 'Pemesanan lapangan soccer Anda telah berhasil dibuat. Siapkan diri untuk pertandingan yang seru!'
             }
           </DialogDescription>
         </DialogHeader>
@@ -127,7 +129,7 @@ export default function BookingSuccessModal({
         <div className="space-y-4 pt-4">
           {/* Field Information */}
           <div className="bg-green-50 rounded-lg p-4">
-            <div className="text-sm text-gray-600">Field</div>
+            <div className="text-sm text-gray-600">Lapangan</div>
             <div className="font-semibold text-gray-900 text-lg">{fieldName}</div>
           </div>
 
@@ -135,14 +137,14 @@ export default function BookingSuccessModal({
           <div className={`grid gap-4 text-center ${slotCount > 1 ? 'grid-cols-4' : 'grid-cols-3'}`}>
             <div className="bg-blue-50 rounded-lg p-3">
               <Calendar className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-              <div className="text-xs text-gray-600">Date</div>
+              <div className="text-xs text-gray-600">Tanggal</div>
               <div className="font-semibold text-gray-900 text-sm">
                 {formatDate(date)}
               </div>
             </div>
             <div className="bg-purple-50 rounded-lg p-3">
               <Clock className="w-6 h-6 text-purple-600 mx-auto mb-2" />
-              <div className="text-xs text-gray-600">Time</div>
+              <div className="text-xs text-gray-600">Waktu</div>
               <div className="font-semibold text-gray-900 text-sm">
                 {formatTime(startTime)} - {formatTime(endTime)}
               </div>
@@ -152,15 +154,15 @@ export default function BookingSuccessModal({
                 <div className="w-6 h-6 bg-emerald-600 rounded-full mx-auto mb-2 flex items-center justify-center">
                   <span className="text-white text-xs font-bold">{slotCount}</span>
                 </div>
-                <div className="text-xs text-gray-600">Slots</div>
+                <div className="text-xs text-gray-600">Slot</div>
                 <div className="font-semibold text-gray-900 text-sm">
-                  {slotCount} × 2hr
+                  {slotCount} × 2jam
                 </div>
               </div>
             )}
             <div className="bg-yellow-50 rounded-lg p-3">
               <DollarSign className="w-6 h-6 text-yellow-600 mx-auto mb-2" />
-              <div className="text-xs text-gray-600">Amount</div>
+              <div className="text-xs text-gray-600">Jumlah</div>
               <div className="font-semibold text-gray-900 text-sm">
                 {formatRupiah(amount)}
               </div>
@@ -174,23 +176,23 @@ export default function BookingSuccessModal({
                 ? 'bg-orange-100 text-orange-800'
                 : 'bg-green-100 text-green-800'
             }`}>
-              {paymentType === 'DEPOSIT' ? '💰 Deposit Payment' : '💵 Full Payment'}
+              {paymentType === 'DEPOSIT' ? '💰 Pembayaran Uang Muka' : '💵 Pembayaran Penuh'}
             </span>
             {paymentType === 'DEPOSIT' && (
               <p className="text-xs text-gray-500 mt-2">
-                Remaining balance to be paid at the field
+                Sisa pembayaran akan dilunasi di lokasi
               </p>
             )}
           </div>
 
           {/* Next Steps */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="text-sm font-medium text-blue-900 mb-2">What's Next?</div>
+            <div className="text-sm font-medium text-blue-900 mb-2">Langkah Selanjutnya?</div>
             <ul className="text-xs text-blue-800 space-y-1">
-              <li>• Upload payment proof if required</li>
-              <li>• Wait for admin approval</li>
-              <li>• Check your email for confirmation</li>
-              <li>• Arrive 15 minutes before game time</li>
+              <li>• Upload bukti pembayaran jika diperlukan</li>
+              <li>• Tunggu persetujuan dari admin</li>
+              <li>• Periksa email Anda untuk konfirmasi</li>
+              <li>• Datang 15 menit sebelum waktu pertandingan</li>
             </ul>
           </div>
 
@@ -201,13 +203,13 @@ export default function BookingSuccessModal({
               onClick={onClose}
               className="flex-1"
             >
-              Close
+              Tutup
             </Button>
             <Button
               onClick={handleViewBookings}
               className="flex-1 bg-green-600 hover:bg-green-700"
             >
-              View My Bookings
+              Lihat Pemesanan Saya
             </Button>
           </div>
         </div>
