@@ -1,0 +1,53 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(npm install:*)",
+      "Bash(npx prisma init:*)",
+      "Bash(npx shadcn@latest init:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npx prisma migrate dev:*)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"yes\" npx prisma migrate:*)",
+      "Bash(npm run db:seed:*)",
+      "Bash(npx prisma db push:*)",
+      "Bash(rd:*)",
+      "Bash(nul:*)",
+      "Bash(taskkill:*)",
+      "Bash(dir:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev:*)",
+      "Bash(mkdir:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(proxy.ts)",
+      "Bash(git checkout:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(claude mcp add:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npx drizzle-kit generate:*)",
+      "Bash(npx drizzle-kit migrate:*)",
+      "Bash(npm run db:generate:*)",
+      "Bash(npm run db:migrate:*)",
+      "Bash(curl:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx drizzle-kit push:*)",
+      "Bash(npx drizzle-kit studio:*)",
+      "Skill(frontend-design:frontend-design)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote set-url:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7",
+    "executeautomation-playwright-server",
+    "filesystem",
+    "chrome-devtools"
+  ]
+}

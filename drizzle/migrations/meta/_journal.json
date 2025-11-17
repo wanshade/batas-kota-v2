@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1763111066942,
+      "tag": "0000_loving_energizer",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1763111414844,
+      "tag": "0001_grey_vargas",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1763111568326,
+      "tag": "0002_silky_yellow_claw",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1763112693268,
+      "tag": "0003_neat_wind_dancer",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1763134601440,
+      "tag": "0004_youthful_king_cobra",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1763135777694,
+      "tag": "0005_woozy_klaw",
+      "breakpoints": true
+    }
+  ]
+}
