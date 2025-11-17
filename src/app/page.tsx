@@ -48,8 +48,7 @@ export default function Home() {
         <HeroImageSlider />
       </section>
 
-    
-        {/* Location Section */}
+      {/* Location Section */}
       <section className="py-20 bg-gradient-to-tr from-[#E1D0B3] via-[#EFE9E3] to-[#F5F0E8] relative overflow-hidden">
         <HowItWorksBackground />
         <div className="container mx-auto px-6 relative z-10">
@@ -67,14 +66,6 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Side - Description */}
             <div className="space-y-6">
-              <div className="space-y-4">
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  Berada di lokasi strategis dengan akses jalan yang mudah,
-                  arena kami dapat dijangkau dengan cepat dari berbagai kawasan
-                  di Selong dan sekitarnya.
-                </p>
-              </div>
-
               <div className="space-y-6">
                 <div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">
@@ -193,7 +184,7 @@ export default function Home() {
                 </div>
 
                 {/* Main headline */}
-                <h2 className="text-5xl font-bold text-gray-900 mb-4 leading-tight">
+                <h2 className="text-4xl font-bold text-gray-900 mb-4 leading-tight">
                   Setiap Permainan Punya Cerita.
                 </h2>
 
