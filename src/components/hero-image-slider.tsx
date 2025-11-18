@@ -79,7 +79,7 @@ export default function HeroImageSlider() {
               <img
                 src="/logo1.png"
                 alt="Batas Kota Logo"
-                className="h-24 sm:h-24 lg:h-32 w-auto object-contain"
+                className="h-40 sm:h-40 lg:h-40 w-auto object-contain"
               />
             </div>
             <h1
