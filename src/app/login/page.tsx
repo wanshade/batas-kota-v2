@@ -147,7 +147,7 @@ export default function LoginPage() {
           <div className="absolute top-1/3 left-1/4 w-60 h-60 bg-[#8B4F4F] rounded-full opacity-10 blur-3xl"></div>
         </div>
 
-        <div className="w-full max-w-lg relative z-10">
+        <div className="w-full max-w-lg relative z-10 mb-20">
           {/* Logo and header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-20 h-20 mb-4">
@@ -312,35 +312,6 @@ export default function LoginPage() {
               </div>
             </CardContent>
           </Card>
-
-          {/* Benefits section */}
-          <div className="mt-8 grid grid-cols-3 gap-4">
-            <div className="text-center">
-              <div className="w-12 h-12 flex items-center justify-center mx-auto mb-2">
-                <img
-                  src="/logo.png"
-                  alt="Batas Kota Logo"
-                  className="h-full w-full object-contain"
-                />
-              </div>
-              <h3 className="font-semibold text-sm text-gray-900">Professional</h3>
-              <p className="text-xs text-gray-600 mt-1">Quality fields</p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-[#E1D0B3] rounded-full flex items-center justify-center mx-auto mb-2">
-                <Users className="w-6 h-6 text-[#703B3B]" />
-              </div>
-              <h3 className="font-semibold text-sm text-gray-900">Community</h3>
-              <p className="text-xs text-gray-600 mt-1">Connect with players</p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-[#F5F0E8] rounded-full flex items-center justify-center mx-auto mb-2">
-                <Clock className="w-6 h-6 text-[#703B3B]" />
-              </div>
-              <h3 className="font-semibold text-sm text-gray-900">Flexible</h3>
-              <p className="text-xs text-gray-600 mt-1">Book anytime</p>
-            </div>
-          </div>
         </div>
       </div>
 

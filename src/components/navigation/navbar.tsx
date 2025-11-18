@@ -264,12 +264,12 @@ export default function Navbar() {
                   </Button>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-4 mb-4">
                   <Link
                     href="/login"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <Button variant="outline" className="w-full">
+                    <Button variant="outline" className="w-full mb-4">
                       Masuk
                     </Button>
                   </Link>

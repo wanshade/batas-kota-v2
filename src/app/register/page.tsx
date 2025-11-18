@@ -279,7 +279,7 @@ export default function RegisterPage() {
           <div className="absolute top-1/3 left-1/4 w-60 h-60 bg-[#8B4F4F] rounded-full opacity-10 blur-3xl"></div>
         </div>
 
-        <div className="w-full max-w-lg relative z-10">
+        <div className="w-full max-w-lg relative z-10 mb-20">
           {/* Logo and header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-20 h-20 mb-4">
