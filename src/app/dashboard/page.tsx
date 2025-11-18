@@ -301,23 +301,25 @@ export default function DashboardPage() {
         </div>
 
         {/* Recent Bookings */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-[#703B3B] to-[#8B4F4F] rounded-lg flex items-center justify-center">
-                <BarChart3 className="w-4 h-4 text-white" />
+        <div className="bg-white rounded-xl shadow-sm border border-[#E1D0B3]/20">
+          <div className="p-6 border-b border-[#E1D0B3]/20">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-gradient-to-br from-[#703B3B] to-[#8B4F4F] rounded-lg flex items-center justify-center">
+                  <BarChart3 className="w-4 h-4 text-white" />
+                </div>
+                <h2 className="text-xl font-semibold text-gray-900">Recent Bookings</h2>
               </div>
-              <CardTitle className="text-xl">Recent Bookings</CardTitle>
+              <Link href="/bookings">
+                <Button variant="outline" className="border-[#E1D0B3] text-[#703B3B] hover:bg-[#F5F0E8] hover:border-[#703B3B]">
+                  View All
+                  <ArrowUpRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
             </div>
-            <Link href="/bookings">
-              <Button variant="outline" className="border-[#E1D0B3] text-[#703B3B] hover:bg-[#F5F0E8] hover:border-[#703B3B]">
-                View All
-                <ArrowUpRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-          </CardHeader>
+          </div>
 
-          <CardContent>
+          <div className="p-6">
             {bookings.length === 0 ? (
               <div className="text-center py-16">
                 <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
@@ -335,107 +337,101 @@ export default function DashboardPage() {
                 </Link>
               </div>
             ) : (
-              <div className="space-y-4">
-                {recentBookings.map((booking) => (
-                  <div key={booking.id} className="border border-[#E1D0B3]/30 rounded-xl p-6 hover:border-[#703B3B]/50 hover:shadow-sm transition-all duration-200 bg-white/50 backdrop-blur-sm">
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                      <div className="flex-1 space-y-4">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                          <h3 className="font-semibold text-lg text-gray-900">
-                            {booking.field.name}
-                          </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-[#E1D0B3]/20">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Field</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Date</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Time</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Duration</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Payment</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Amount</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Status</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-gray-900">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recentBookings.map((booking, index) => (
+                      <tr
+                        key={booking.id}
+                        className={`border-b border-[#E1D0B3]/10 hover:bg-[#F5F0E8]/30 transition-colors duration-200 ${
+                          index === recentBookings.length - 1 ? 'border-b-0' : ''
+                        }`}
+                      >
+                        <td className="py-4 px-4">
+                          <div className="font-medium text-gray-900">{booking.field.name}</div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="text-gray-700">
+                            {format(new Date(booking.startTime), "MMM d, yyyy")}
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="text-gray-700">
+                            {format(new Date(booking.startTime), "h:mm a")} - {format(new Date(booking.endTime), "h:mm a")}
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="text-gray-700">
+                            {Math.round((new Date(booking.endTime).getTime() - new Date(booking.startTime).getTime()) / (1000 * 60 * 60))}h
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="text-gray-700">
+                            {booking.paymentType === "DEPOSIT" ? "Deposit" : "Full Payment"}
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div>
+                            <div className="font-bold text-[#703B3B]">
+                              {formatRupiah(booking.amountPaid)}
+                            </div>
+                            {booking.paymentType === "DEPOSIT" && (
+                              <div className="text-xs text-gray-500">
+                                +{formatRupiah(booking.field.pricePerHour * Math.round((new Date(booking.endTime).getTime() - new Date(booking.startTime).getTime()) / (1000 * 60 * 60)) - booking.amountPaid)} on-site
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
                           <Badge
-                            className={`${getStatusColor(booking.status)} border font-medium flex items-center gap-2`}
+                            className={`${getStatusColor(booking.status)} border font-medium flex items-center gap-2 w-fit`}
                           >
                             {getStatusIcon(booking.status)}
                             {booking.status}
                           </Badge>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium uppercase tracking-wide">
-                              Date
-                            </div>
-                            <div className="text-gray-900 font-medium">
-                              {format(new Date(booking.startTime), "MMM d, yyyy")}
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium uppercase tracking-wide">
-                              Time
-                            </div>
-                            <div className="text-gray-900 font-medium">
-                              {format(new Date(booking.startTime), "h:mm a")} - {format(new Date(booking.endTime), "h:mm a")}
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium uppercase tracking-wide">
-                              Duration
-                            </div>
-                            <div className="text-gray-900 font-medium">
-                              {Math.round((new Date(booking.endTime).getTime() - new Date(booking.startTime).getTime()) / (1000 * 60 * 60))}h
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium uppercase tracking-wide">
-                              Payment
-                            </div>
-                            <div className="text-gray-900 font-medium">
-                              {booking.paymentType === "DEPOSIT" ? "Deposit" : "Full Payment"}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="pt-4 border-t border-[#E1D0B3]/20">
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <div>
-                              <div className="text-sm text-gray-600 mb-1">
-                                Amount Paid
-                              </div>
-                              <div className="text-2xl font-bold text-[#703B3B]">
-                                {formatRupiah(booking.amountPaid)}
-                              </div>
-                              {booking.paymentType === "DEPOSIT" && (
-                                <div className="text-xs text-gray-500 mt-1">
-                                  Remaining {formatRupiah(booking.field.pricePerHour * Math.round((new Date(booking.endTime).getTime() - new Date(booking.startTime).getTime()) / (1000 * 60 * 60)) - booking.amountPaid)} on-site
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="flex gap-3">
-                              {booking.status === "PENDING" && !booking.proofImageUrl && (
-                                <Button
-                                  size="sm"
-                                  className="bg-gradient-to-r from-[#703B3B] to-[#8B4F4F] hover:from-[#5a2f2f] hover:to-[#703B3B] text-white shadow-md hover:shadow-lg transition-all duration-200"
-                                  onClick={() => {
-                                    setSelectedBooking(booking);
-                                    setPaymentModalOpen(true);
-                                  }}
-                                >
-                                  <CreditCard className="w-4 h-4 mr-2" />
-                                  Upload Payment
-                                </Button>
-                              )}
-                              <Button asChild variant="outline" size="sm" className="border-[#E1D0B3] text-[#703B3B] hover:bg-[#F5F0E8]">
-                                <Link href={`/bookings/${booking.id}`}>
-                                  View Details
-                                </Link>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="flex items-center justify-center gap-2">
+                            {booking.status === "PENDING" && !booking.proofImageUrl && (
+                              <Button
+                                size="sm"
+                                className="bg-gradient-to-r from-[#703B3B] to-[#8B4F4F] hover:from-[#5a2f2f] hover:to-[#703B3B] text-white shadow-md hover:shadow-lg transition-all duration-200"
+                                onClick={() => {
+                                  setSelectedBooking(booking);
+                                  setPaymentModalOpen(true);
+                                }}
+                              >
+                                <CreditCard className="w-4 h-4 mr-2" />
+                                Upload
                               </Button>
-                            </div>
+                            )}
+                            <Button asChild variant="outline" size="sm" className="border-[#E1D0B3] text-[#703B3B] hover:bg-[#F5F0E8]">
+                              <Link href={`/bookings/${booking.id}`}>
+                                Details
+                              </Link>
+                            </Button>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Payment Upload Modal */}
         <PaymentUploadModal
