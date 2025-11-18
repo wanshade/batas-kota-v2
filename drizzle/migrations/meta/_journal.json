@@ -43,6 +43,13 @@
       "when": 1763135777694,
       "tag": "0005_woozy_klaw",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1763456351132,
+      "tag": "0006_equal_red_hulk",
+      "breakpoints": true
     }
   ]
 }

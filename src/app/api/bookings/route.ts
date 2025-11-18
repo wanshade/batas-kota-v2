@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth"
 import { db, bookings, users, fields } from "@/db"
 import { eq, and, or, lte, gt, lt, gte, inArray, desc } from "drizzle-orm"
 import { authOptions } from "@/lib/auth"
+import { calculateBookingPriceServer } from "@/lib/schedule-server"
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,32 +26,43 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { fieldId, date, startTime, endTime, paymentType, amountPaid } = await request.json()
+    const { fieldId, date, startTime, endTime, paymentType, amountPaid, namaTim, noWhatsapp } = await request.json()
 
-    if (!fieldId || !date || !startTime || !endTime || !paymentType) {
+    console.log('Received booking request:', { fieldId, date, startTime, endTime, paymentType, amountPaid, namaTim, noWhatsapp })
+
+    if (!fieldId || !date || !startTime || !endTime || !paymentType || !namaTim || !noWhatsapp) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       )
     }
 
-    let startDate = new Date(startTime)
-    let endDate = new Date(endTime)
+    const startDate = new Date(startTime)
+    const endDate = new Date(endTime)
 
-    // Round to nearest hour
-    startDate = new Date(startDate)
-    startDate.setMinutes(0, 0, 0)
-
-    endDate = new Date(endDate)
-    endDate.setMinutes(0, 0, 0)
-
-    // Ensure end time is at least 1 hour after start time
-    if (endDate <= startDate) {
-      endDate = new Date(startDate.getTime() + 60 * 60 * 1000) // Add 1 hour
-    }
-
+    // Use the exact times provided by time slots - no rounding needed
     // Calculate duration in hours
     const durationHours = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60)
+
+    // Calculate price using jadwal.json
+    const bookingDate = new Date(date)
+    const startTimeString = startDate.toTimeString().slice(0, 5)
+    const endTimeString = endDate.toTimeString().slice(0, 5)
+
+    const calculatedPrice = calculateBookingPriceServer(bookingDate, startTimeString, endTimeString)
+
+    if (calculatedPrice === 0) {
+      return NextResponse.json(
+        { error: "Invalid time slot - not available in schedule" },
+        { status: 400 }
+      )
+    }
+
+    // Calculate the actual amount to be paid based on payment type
+    let actualAmountPaid = calculatedPrice
+    if (paymentType === "DEPOSIT") {
+      actualAmountPaid = Math.round(calculatedPrice * 0.3) // 30% deposit
+    }
 
     if (durationHours < 1) {
       return NextResponse.json(
@@ -104,16 +116,17 @@ export async function POST(request: NextRequest) {
         startTime: startDate,
         endTime: endDate,
         paymentType: paymentType as "FULL" | "DEPOSIT",
-        amountPaid,
+        amountPaid: actualAmountPaid, // Use server-calculated amount instead of frontend value
+        namaTim,
+        noWhatsapp,
         status: "PENDING",
       })
       .returning()
 
-    // Fetch related data
+    // Fetch related data (note: we no longer use pricePerHour from fields)
     const [field] = await db
       .select({
         name: fields.name,
-        pricePerHour: fields.pricePerHour,
       })
       .from(fields)
       .where(eq(fields.id, fieldId))
@@ -133,10 +146,11 @@ export async function POST(request: NextRequest) {
         message: "Booking created successfully",
         booking: {
           id: booking.id,
-          field: field || { name: 'Unknown Field', pricePerHour: 0 },
+          field: field || { name: 'Unknown Field' },
           startTime: booking.startTime,
           endTime: booking.endTime,
           amountPaid: booking.amountPaid,
+          calculatedPrice,
           paymentType: booking.paymentType,
           status: booking.status,
           durationHours

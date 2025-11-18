@@ -35,6 +35,8 @@ interface Booking {
   amountPaid: number
   paymentType: string
   proofImageUrl?: string
+  namaTim?: string
+  noWhatsapp?: string
   createdAt: string
   user: {
     name: string
@@ -343,6 +345,8 @@ export default function EnhancedBookingsPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Field</TableHead>
+                      <TableHead>Team Name</TableHead>
+                      <TableHead>WhatsApp</TableHead>
                       <TableHead>Customer</TableHead>
                       <TableHead>Date & Time</TableHead>
                       <TableHead>Amount</TableHead>
@@ -360,6 +364,12 @@ export default function EnhancedBookingsPage() {
                               {formatRupiah(booking.field.pricePerHour)}/hr
                             </div>
                           </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="font-medium">{booking.namaTim || '-'}</div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="font-medium">{booking.noWhatsapp || '-'}</div>
                         </TableCell>
                         <TableCell>
                           <div>

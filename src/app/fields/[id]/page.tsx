@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import HourlyBookingGrid from "@/components/hourly-booking-grid";
+import TimeSlotBookingForm from "@/components/time-slot-booking-form";
 import { formatRupiah } from "@/lib/currency";
 import { db, fields, bookings, users, bookingStatusEnum } from "@/db";
 import { eq, and, asc, inArray } from "drizzle-orm";
@@ -97,10 +97,9 @@ export default async function FieldDetailPage({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="text-sm text-gray-600 mb-1">Harga per jam</div>
-                <div className="text-2xl font-bold text-green-600">
-                  {formatRupiah(field.pricePerHour)}
-                </div>
+                <div className="text-sm text-gray-600 mb-1">Sistem harga</div>
+                <div className="text-lg font-semibold">Berdasarkan Jadwal</div>
+                <div className="text-xs text-gray-500 mt-1">Harga berbeda per slot waktu</div>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="text-sm text-gray-600 mb-1">Tipe lapangan</div>
@@ -121,10 +120,9 @@ export default async function FieldDetailPage({
             </div>
 
             <div className="border-t pt-8 mt-8">
-              <HourlyBookingGrid
+              <TimeSlotBookingForm
                 fieldId={field.id}
                 fieldName={field.name}
-                pricePerHour={field.pricePerHour}
                 existingBookings={field.bookings}
               />
             </div>

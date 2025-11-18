@@ -39,6 +39,8 @@ export async function GET(request: NextRequest) {
           amountPaid: bookings.amountPaid,
           paymentType: bookings.paymentType,
           proofImageUrl: bookings.proofImageUrl,
+          namaTim: bookings.namaTim,
+          noWhatsapp: bookings.noWhatsapp,
           createdAt: bookings.createdAt,
           user: {
             id: users.id,

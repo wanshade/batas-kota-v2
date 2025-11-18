@@ -64,9 +64,14 @@ export default async function FieldsPage() {
                 {field.description || "Professional mini soccer field with quality turf and facilities"}
               </CardDescription>
               <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold text-green-600">
-                  {formatRupiah(field.pricePerHour)}/hr
-                </span>
+                <div>
+                  <span className="text-lg font-bold text-green-600">
+                    Harga Berdasarkan Jadwal
+                  </span>
+                  <div className="text-sm text-gray-500">
+                    Harga berbeda per slot waktu
+                  </div>
+                </div>
               </div>
             </CardContent>
             <CardFooter className="p-6 pt-0">

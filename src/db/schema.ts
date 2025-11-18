@@ -54,12 +54,16 @@ export const bookings = pgTable('bookings', {
   paymentType: paymentTypeEnum('payment_type').notNull(),
   amountPaid: integer('amount_paid').notNull(),
   proofImageUrl: text('proof_image_url'),
+  namaTim: varchar('nama_tim', { length: 255 }),
+  noWhatsapp: varchar('no_whatsapp', { length: 20 }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 }, (table) => ({
   userIdIdx: index('bookings_user_id_idx').on(table.userId),
   fieldIdIdx: index('bookings_field_id_idx').on(table.fieldId),
   dateIdx: index('bookings_date_idx').on(table.date),
   statusIdx: index('bookings_status_idx').on(table.status),
+  namaTimIdx: index('bookings_nama_tim_idx').on(table.namaTim),
+  noWhatsappIdx: index('bookings_no_whatsapp_idx').on(table.noWhatsapp),
 }));
 
 // Relations
