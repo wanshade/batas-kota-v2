@@ -76,18 +76,16 @@ export default async function FieldDetailPage({
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <Card>
-          <CardHeader className="p-0">
-            {field.imageUrl && (
-              <div className="aspect-video bg-gray-200 rounded-t-lg">
-                <img
-                  src={field.imageUrl}
-                  alt={field.name}
-                  className="w-full h-full object-cover rounded-t-lg"
-                />
-              </div>
-            )}
-          </CardHeader>
+        <Card className="overflow-hidden">
+          {field.imageUrl && (
+            <div className="aspect-video bg-gray-200">
+              <img
+                src={field.imageUrl}
+                alt={field.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
           <CardContent className="p-6">
             <CardTitle className="mb-4 text-2xl">{field.name}</CardTitle>
             <CardDescription className="text-lg mb-6">
@@ -99,7 +97,9 @@ export default async function FieldDetailPage({
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="text-sm text-gray-600 mb-1">Sistem harga</div>
                 <div className="text-lg font-semibold">Berdasarkan Jadwal</div>
-                <div className="text-xs text-gray-500 mt-1">Harga berbeda per slot waktu</div>
+                <div className="text-xs text-gray-500 mt-1">
+                  Harga berbeda per slot waktu
+                </div>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="text-sm text-gray-600 mb-1">Tipe lapangan</div>

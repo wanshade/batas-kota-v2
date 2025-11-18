@@ -73,11 +73,11 @@ export default function HeroImageSlider() {
       <div className="absolute inset-0 flex items-center justify-center text-white z-50 px-4">
         <div className="max-w-4xl w-full text-center">
           {/* Main Title - Centered on all devices */}
-          <div className="mb-8">
+          <div className="mb-6">
             {/* Logo - centered on all devices, larger on tablet and desktop */}
-            <div className="mb-6 flex justify-center">
+            <div className="mb-2 flex justify-center">
               <img
-                src="/logo.png"
+                src="/logo1.png"
                 alt="Batas Kota Logo"
                 className="h-20 sm:h-24 lg:h-32 w-auto object-contain"
               />
@@ -107,7 +107,7 @@ export default function HeroImageSlider() {
             >
               Rasakan Serunya Bermain di
               <span className="block text-[#E1D0B3] font-bold mt-1">
-                Mini Soccer Terbaik di Selong
+                Mini Soccer Terbaik di Lombok
               </span>
             </p>
           </div>
