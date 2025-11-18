@@ -221,80 +221,82 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Quick Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300 group">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
-                  Total Bookings
+        {/* Quick Stats Card */}
+        <div className="mb-8">
+          <Card className="border-0 shadow-sm bg-gradient-to-br from-white to-[#FAF7F2]">
+            <CardContent className="p-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {/* Total Bookings */}
+                <div className="text-center sm:text-left">
+                  <div className="flex items-center justify-center sm:justify-start gap-3 mb-3">
+                    <div className="w-12 h-12 bg-[#703B3B]/10 rounded-xl flex items-center justify-center">
+                      <Calendar className="w-6 h-6 text-[#703B3B]" />
+                    </div>
+                    <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
+                      Total Bookings
+                    </div>
+                  </div>
+                  <div className="text-4xl font-bold text-gray-900 mb-1">
+                    {totalBookings}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {totalBookings > 0 ? "Total bookings made" : "Start booking fields"}
+                  </div>
                 </div>
-                <div className="w-10 h-10 bg-[#703B3B]/10 group-hover:bg-[#703B3B]/20 rounded-lg flex items-center justify-center transition-colors">
-                  <Calendar className="w-5 h-5 text-[#703B3B]" />
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">
-                {totalBookings}
-              </div>
-              <div className="text-sm text-gray-600">
-                {totalBookings > 0 ? "Total bookings made" : "Start booking fields"}
-              </div>
-            </CardContent>
-          </Card>
 
-          <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300 group">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
-                  Pending
+                {/* Pending */}
+                <div className="text-center sm:text-left">
+                  <div className="flex items-center justify-center sm:justify-start gap-3 mb-3">
+                    <div className="w-12 h-12 bg-[#E1D0B3]/20 rounded-xl flex items-center justify-center">
+                      <Clock className="w-6 h-6 text-[#8B4F4F]" />
+                    </div>
+                    <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
+                      Pending
+                    </div>
+                  </div>
+                  <div className="text-4xl font-bold text-gray-900 mb-1">
+                    {pendingBookings}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {pendingBookings > 0 ? "Awaiting confirmation" : "No pending bookings"}
+                  </div>
                 </div>
-                <div className="w-10 h-10 bg-[#E1D0B3]/20 group-hover:bg-[#E1D0B3]/30 rounded-lg flex items-center justify-center transition-colors">
-                  <Clock className="w-5 h-5 text-[#8B4F4F]" />
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">
-                {pendingBookings}
-              </div>
-              <div className="text-sm text-gray-600">
-                {pendingBookings > 0 ? "Awaiting confirmation" : "No pending bookings"}
-              </div>
-            </CardContent>
-          </Card>
 
-          <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300 group">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
-                  Completed
+                {/* Completed */}
+                <div className="text-center sm:text-left">
+                  <div className="flex items-center justify-center sm:justify-start gap-3 mb-3">
+                    <div className="w-12 h-12 bg-[#703B3B]/10 rounded-xl flex items-center justify-center">
+                      <CheckCircle2 className="w-6 h-6 text-[#703B3B]" />
+                    </div>
+                    <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
+                      Completed
+                    </div>
+                  </div>
+                  <div className="text-4xl font-bold text-gray-900 mb-1">
+                    {completedBookings}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {completedBookings > 0 ? "Sessions completed" : "No completed sessions"}
+                  </div>
                 </div>
-                <div className="w-10 h-10 bg-[#703B3B]/10 group-hover:bg-[#703B3B]/20 rounded-lg flex items-center justify-center transition-colors">
-                  <CheckCircle2 className="w-5 h-5 text-[#703B3B]" />
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">
-                {completedBookings}
-              </div>
-              <div className="text-sm text-gray-600">
-                {completedBookings > 0 ? "Sessions completed" : "No completed sessions"}
-              </div>
-            </CardContent>
-          </Card>
 
-          <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300 group">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
-                  Total Spent
+                {/* Total Spent */}
+                <div className="text-center sm:text-left">
+                  <div className="flex items-center justify-center sm:justify-start gap-3 mb-3">
+                    <div className="w-12 h-12 bg-[#E1D0B3]/20 rounded-xl flex items-center justify-center">
+                      <DollarSign className="w-6 h-6 text-[#8B4F4F]" />
+                    </div>
+                    <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
+                      Total Spent
+                    </div>
+                  </div>
+                  <div className="text-3xl font-bold text-[#703B3B] mb-1">
+                    {formatRupiah(totalSpent)}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {totalSpent > 0 ? "Total amount spent" : "No spending yet"}
+                  </div>
                 </div>
-                <div className="w-10 h-10 bg-[#E1D0B3]/20 group-hover:bg-[#E1D0B3]/30 rounded-lg flex items-center justify-center transition-colors">
-                  <DollarSign className="w-5 h-5 text-[#8B4F4F]" />
-                </div>
-              </div>
-              <div className="text-2xl font-bold text-gray-900 mb-1">
-                {formatRupiah(totalSpent)}
-              </div>
-              <div className="text-sm text-gray-600">
-                {totalSpent > 0 ? "Total amount spent" : "No spending yet"}
               </div>
             </CardContent>
           </Card>
