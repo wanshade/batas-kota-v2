@@ -21,7 +21,7 @@ This is a mini soccer field booking application called "Batas Kota – The Town 
 - **Styling**: Tailwind CSS v4, Radix UI components
 - **Database**: PostgreSQL with Drizzle ORM
 - **Authentication**: NextAuth.js with credentials provider
-- **File Storage**: Vercel Blob
+- **File Storage**: Vercel Blob   
 - **Form Handling**: React Hook Form with Zod validation
 - **Date/Time**: date-fns with timezone support
 - **State Management**: Zustand for booking state
