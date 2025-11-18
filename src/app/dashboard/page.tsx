@@ -11,7 +11,23 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { format } from "date-fns"
 import { formatRupiah } from "@/lib/currency"
 import PaymentUploadModal from "@/components/payment-upload-modal"
-import { Calendar, DollarSign, TrendingUp, User, MapPin, CreditCard, ChevronRight, Activity, Users } from "lucide-react"
+import {
+  Calendar,
+  DollarSign,
+  TrendingUp,
+  User,
+  MapPin,
+  CreditCard,
+  Activity,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  BarChart3,
+  Users,
+  Target,
+  PlayCircle,
+  ArrowUpRight
+} from "lucide-react"
 
 interface Booking {
   id: string
@@ -67,97 +83,97 @@ export default function DashboardPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-amber-100 text-amber-900 border-amber-300"
+        return "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100"
       case "APPROVED":
-        return "bg-emerald-100 text-emerald-900 border-emerald-300"
+        return "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
       case "REJECTED":
-        return "bg-red-100 text-red-900 border-red-300"
+        return "bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
       case "COMPLETED":
-        return "bg-blue-100 text-blue-900 border-blue-300"
+        return "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
       case "CANCELLED":
-        return "bg-gray-100 text-gray-800 border-gray-300"
+        return "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
       default:
-        return "bg-gray-100 text-gray-800 border-gray-300"
+        return "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
     }
   }
 
-  const getStatusVariant = (status: string) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "default"
+        return <Clock className="w-4 h-4" />
       case "APPROVED":
-        return "default"
+        return <CheckCircle2 className="w-4 h-4" />
       case "REJECTED":
-        return "destructive"
+        return <AlertCircle className="w-4 h-4" />
       case "COMPLETED":
-        return "secondary"
+        return <Activity className="w-4 h-4" />
       case "CANCELLED":
-        return "outline"
+        return <AlertCircle className="w-4 h-4" />
       default:
-        return "outline"
+        return <AlertCircle className="w-4 h-4" />
     }
   }
 
   const handlePaymentUploadSuccess = () => {
-    // Refresh bookings to show updated status
     fetchBookings()
   }
 
   if (status === "loading" || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Header skeleton */}
-          <div className="mb-8">
-            <Skeleton className="h-10 w-64 mb-3 bg-gray-200 rounded-lg" />
-            <Skeleton className="h-6 w-96 bg-gray-200 rounded-lg" />
-          </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="container mx-auto px-4 py-8 max-w-7xl">
+          <div className="space-y-6">
+            {/* Header Skeleton */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <Skeleton className="h-12 w-12 bg-gray-200 rounded-xl" />
+                <div className="space-y-2">
+                  <Skeleton className="h-8 w-64 bg-gray-200 rounded-lg" />
+                  <Skeleton className="h-4 w-96 bg-gray-200 rounded" />
+                </div>
+              </div>
+            </div>
 
-          {/* Stats cards skeleton */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="border-0 shadow-md">
-                <CardHeader className="pb-3">
-                  <Skeleton className="h-5 w-24 bg-gray-200 rounded" />
-                </CardHeader>
-                <CardContent>
-                  <Skeleton className="h-8 w-20 bg-gray-200 rounded mb-2" />
-                  <Skeleton className="h-4 w-32 bg-gray-200 rounded" />
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+            {/* Stats Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <Card key={i} className="border-0 shadow-sm">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <Skeleton className="h-4 w-24 bg-gray-200 rounded" />
+                      <Skeleton className="h-10 w-10 bg-gray-200 rounded-lg" />
+                    </div>
+                    <Skeleton className="h-8 w-20 bg-gray-200 rounded mb-2" />
+                    <Skeleton className="h-3 w-32 bg-gray-200 rounded" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
 
-          {/* Bookings section skeleton */}
-          <div className="flex justify-between items-center mb-6">
-            <Skeleton className="h-8 w-40 bg-gray-200 rounded-lg" />
-            <Skeleton className="h-10 w-36 bg-gray-200 rounded-lg" />
-          </div>
-
-          {/* Booking cards skeleton */}
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="border-0 shadow-md">
-                <CardContent className="p-6">
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                    <div className="flex-1 space-y-4">
-                      <div className="flex items-center gap-4">
+            {/* Bookings Skeleton */}
+            <div className="space-y-6">
+              <Skeleton className="h-8 w-40 bg-gray-200 rounded-lg" />
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <Card key={i} className="border-0 shadow-sm">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-4">
                         <Skeleton className="h-6 w-48 bg-gray-200 rounded" />
                         <Skeleton className="h-6 w-24 bg-gray-200 rounded-full" />
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         {[1, 2, 3, 4].map((j) => (
                           <div key={j} className="space-y-2">
-                            <Skeleton className="h-4 w-16 bg-gray-200 rounded" />
-                            <Skeleton className="h-5 w-24 bg-gray-200 rounded" />
+                            <Skeleton className="h-3 w-16 bg-gray-200 rounded" />
+                            <Skeleton className="h-4 w-24 bg-gray-200 rounded" />
                           </div>
                         ))}
                       </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -167,57 +183,90 @@ export default function DashboardPage() {
   const totalBookings = bookings.length
   const approvedBookings = bookings.filter(b => b.status === "APPROVED").length
   const completedBookings = bookings.filter(b => b.status === "COMPLETED").length
+  const pendingBookings = bookings.filter(b => b.status === "PENDING").length
   const totalSpent = bookings.filter(b => b.status === "APPROVED" || b.status === "COMPLETED").reduce((sum, b) => sum + b.amountPaid, 0)
 
+  // Get recent bookings (last 5)
+  const recentBookings = bookings
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 5)
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header Section */}
         <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
-              <User className="w-6 h-6 text-white" />
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                <User className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-1">
+                  Welcome back, {session?.user?.name?.split(' ')[0]}! 👋
+                </h1>
+                <p className="text-gray-600">
+                  Manage your soccer field bookings and explore premium venues
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Welcome back, {session?.user?.name?.split(' ')[0]}!
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Manage your soccer field bookings and explore premium venues
-              </p>
-            </div>
+            <Link href="/fields">
+              <Button className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+                <PlayCircle className="w-4 h-4 mr-2" />
+                Book New Field
+              </Button>
+            </Link>
           </div>
         </div>
 
         {/* Quick Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="border-0 shadow-md hover:shadow-lg transition-shadow duration-300">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300 group">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
                   Total Bookings
                 </div>
-                <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-emerald-700" />
+                <div className="w-10 h-10 bg-blue-50 group-hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors">
+                  <Calendar className="w-5 h-5 text-blue-600" />
                 </div>
               </div>
               <div className="text-3xl font-bold text-gray-900 mb-1">
                 {totalBookings}
               </div>
               <div className="text-sm text-gray-600">
-                {totalBookings > 0 ? `Bookings made` : 'Start booking fields'}
+                {totalBookings > 0 ? 'Total bookings made' : 'Start booking fields'}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-md hover:shadow-lg transition-shadow duration-300">
+          <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300 group">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
+                  Pending
+                </div>
+                <div className="w-10 h-10 bg-amber-50 group-hover:bg-amber-100 rounded-lg flex items-center justify-center transition-colors">
+                  <Clock className="w-5 h-5 text-amber-600" />
+                </div>
+              </div>
+              <div className="text-3xl font-bold text-gray-900 mb-1">
+                {pendingBookings}
+              </div>
+              <div className="text-sm text-gray-600">
+                {pendingBookings > 0 ? 'Awaiting confirmation' : 'No pending bookings'}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300 group">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
                   Completed
                 </div>
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Activity className="w-5 h-5 text-blue-700" />
+                <div className="w-10 h-10 bg-emerald-50 group-hover:bg-emerald-100 rounded-lg flex items-center justify-center transition-colors">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                 </div>
               </div>
               <div className="text-3xl font-bold text-gray-900 mb-1">
@@ -229,36 +278,17 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
-                  Approved
-                </div>
-                <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                  <Activity className="w-5 h-5 text-emerald-700" />
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">
-                {approvedBookings}
-              </div>
-              <div className="text-sm text-gray-600">
-                {approvedBookings > 0 ? 'Bookings confirmed' : 'No confirmed bookings'}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-md hover:shadow-lg transition-shadow duration-300">
+          <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300 group">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
                   Total Spent
                 </div>
-                <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                  <DollarSign className="w-5 h-5 text-emerald-700" />
+                <div className="w-10 h-10 bg-purple-50 group-hover:bg-purple-100 rounded-lg flex items-center justify-center transition-colors">
+                  <DollarSign className="w-5 h-5 text-purple-600" />
                 </div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">
+              <div className="text-2xl font-bold text-gray-900 mb-1">
                 {formatRupiah(totalSpent)}
               </div>
               <div className="text-sm text-gray-600">
@@ -268,22 +298,26 @@ export default function DashboardPage() {
           </Card>
         </div>
 
-  
         {/* Recent Bookings */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Recent Bookings</h2>
+        <Card className="border-0 shadow-sm">
+          <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                <BarChart3 className="w-4 h-4 text-white" />
+              </div>
+              <CardTitle className="text-xl">Recent Bookings</CardTitle>
+            </div>
             <Link href="/bookings">
               <Button variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-50">
                 View All
+                <ArrowUpRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
-          </div>
+          </CardHeader>
 
-          {/* Empty State */}
-          {bookings.length === 0 ? (
-            <Card className="border-0 shadow-md text-center py-12">
-              <CardContent>
+          <CardContent>
+            {bookings.length === 0 ? (
+              <div className="text-center py-16">
                 <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <MapPin className="w-10 h-10 text-gray-400" />
                 </div>
@@ -292,17 +326,16 @@ export default function DashboardPage() {
                   Start exploring and booking premium soccer fields in your area
                 </p>
                 <Link href="/fields">
-                  <Button className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg">
+                  <Button className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200">
+                    <Target className="w-4 h-4 mr-2" />
                     Explore Fields
                   </Button>
                 </Link>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-4">
-              {bookings.slice(0, 5).map((booking) => (
-                <Card key={booking.id} className="border-0 shadow-md hover:shadow-lg transition-shadow duration-300">
-                  <CardContent className="p-6">
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {recentBookings.map((booking) => (
+                  <div key={booking.id} className="border border-gray-200 rounded-xl p-6 hover:border-emerald-300 hover:shadow-sm transition-all duration-200">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                       <div className="flex-1 space-y-4">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -310,9 +343,9 @@ export default function DashboardPage() {
                             {booking.field.name}
                           </h3>
                           <Badge
-                            variant={getStatusVariant(booking.status) as any}
-                            className={`${getStatusColor(booking.status)} border font-medium`}
+                            className={`${getStatusColor(booking.status)} border font-medium flex items-center gap-2`}
                           >
+                            {getStatusIcon(booking.status)}
                             {booking.status}
                           </Badge>
                         </div>
@@ -361,7 +394,7 @@ export default function DashboardPage() {
                               <div className="text-sm text-gray-600 mb-1">
                                 Amount Paid
                               </div>
-                              <div className="text-xl font-bold text-emerald-600">
+                              <div className="text-2xl font-bold text-emerald-600">
                                 {formatRupiah(booking.amountPaid)}
                               </div>
                               {booking.paymentType === "DEPOSIT" && (
@@ -375,12 +408,13 @@ export default function DashboardPage() {
                               {booking.status === "PENDING" && !booking.proofImageUrl && (
                                 <Button
                                   size="sm"
-                                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                                  className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white shadow-md hover:shadow-lg transition-all duration-200"
                                   onClick={() => {
                                     setSelectedBooking(booking)
                                     setPaymentModalOpen(true)
                                   }}
                                 >
+                                  <CreditCard className="w-4 h-4 mr-2" />
                                   Upload Payment
                                 </Button>
                               )}
@@ -394,22 +428,21 @@ export default function DashboardPage() {
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
-        </div>
-
-      {/* Payment Upload Modal */}
-      <PaymentUploadModal
-        isOpen={paymentModalOpen}
-        onClose={() => setPaymentModalOpen(false)}
-        booking={selectedBooking}
-        onSuccess={handlePaymentUploadSuccess}
-      />
+        {/* Payment Upload Modal */}
+        <PaymentUploadModal
+          isOpen={paymentModalOpen}
+          onClose={() => setPaymentModalOpen(false)}
+          booking={selectedBooking}
+          onSuccess={handlePaymentUploadSuccess}
+        />
+      </div>
     </div>
   )
 }
