@@ -4,6 +4,83 @@ import React, { useState, useEffect } from "react";
 
 const images = ["/1.jpeg", "/2.jpeg", "/3.jpeg"];
 
+// Custom TypingText Component
+function TypingText({ text }: { text: string }) {
+  const [displayedText, setDisplayedText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+  const [phase, setPhase] = useState<'typing' | 'pause' | 'deleting'>('typing');
+
+  useEffect(() => {
+    let currentIndex = 0;
+    setDisplayedText('');
+    setPhase('typing');
+    setShowCursor(true);
+
+    const typingSpeed = 150; // speed of typing
+    const deleteSpeed = 100; // speed of deleting
+    const pauseDuration = 2000; // pause before deleting (2 seconds)
+
+    const startTyping = () => {
+      setPhase('typing');
+      currentIndex = 0;
+
+      const typingInterval = setInterval(() => {
+        if (currentIndex < text.length) {
+          setDisplayedText(text.slice(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          clearInterval(typingInterval);
+          setPhase('pause');
+          setShowCursor(true);
+
+          // Start pause before deleting
+          setTimeout(() => {
+            setPhase('deleting');
+            startDeleting();
+          }, pauseDuration);
+        }
+      }, typingSpeed);
+    };
+
+    const startDeleting = () => {
+      currentIndex = text.length;
+
+      const deletingInterval = setInterval(() => {
+        if (currentIndex > 0) {
+          setDisplayedText(text.slice(0, currentIndex - 1));
+          currentIndex--;
+        } else {
+          clearInterval(deletingInterval);
+          setPhase('pause');
+          setShowCursor(false);
+
+          // Pause briefly before starting again
+          setTimeout(() => {
+            startTyping();
+          }, 500);
+        }
+      }, deleteSpeed);
+    };
+
+    startTyping();
+
+    return () => {
+      // Cleanup would be handled by the intervals clearing themselves
+    };
+  }, [text]);
+
+  return (
+    <span>
+      {displayedText}
+      {showCursor && (
+        <span
+          className="inline-block w-0.5 h-4 bg-white ml-1 animate-blink-cursor"
+        />
+      )}
+    </span>
+  );
+}
+
 export default function HeroImageSlider() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState<boolean[]>(
@@ -79,7 +156,7 @@ export default function HeroImageSlider() {
               <img
                 src="/logo1.png"
                 alt="Batas Kota Logo"
-                className="h-40 sm:h-40 lg:h-40 w-auto object-contain"
+                className="h-40 sm:h-40 lg:h-32 w-auto object-contain"
               />
             </div>
             <h1
@@ -94,7 +171,7 @@ export default function HeroImageSlider() {
                 className="text-lg sm:text-xl lg:text-2xl font-light tracking-wide
                            text-white/90"
               >
-                The Town Space
+                <TypingText text="The Town Space" />
               </h2>
             </div>
           </div>
