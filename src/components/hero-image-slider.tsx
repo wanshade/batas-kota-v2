@@ -6,14 +6,14 @@ const images = ["/1.jpeg", "/2.jpeg", "/3.jpeg"];
 
 // Custom TypingText Component
 function TypingText({ text }: { text: string }) {
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayedText, setDisplayedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
-  const [phase, setPhase] = useState<'typing' | 'pause' | 'deleting'>('typing');
+  const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing");
 
   useEffect(() => {
     let currentIndex = 0;
-    setDisplayedText('');
-    setPhase('typing');
+    setDisplayedText("");
+    setPhase("typing");
     setShowCursor(true);
 
     const typingSpeed = 150; // speed of typing
@@ -21,7 +21,7 @@ function TypingText({ text }: { text: string }) {
     const pauseDuration = 2000; // pause before deleting (2 seconds)
 
     const startTyping = () => {
-      setPhase('typing');
+      setPhase("typing");
       currentIndex = 0;
 
       const typingInterval = setInterval(() => {
@@ -30,12 +30,12 @@ function TypingText({ text }: { text: string }) {
           currentIndex++;
         } else {
           clearInterval(typingInterval);
-          setPhase('pause');
+          setPhase("pause");
           setShowCursor(true);
 
           // Start pause before deleting
           setTimeout(() => {
-            setPhase('deleting');
+            setPhase("deleting");
             startDeleting();
           }, pauseDuration);
         }
@@ -51,7 +51,7 @@ function TypingText({ text }: { text: string }) {
           currentIndex--;
         } else {
           clearInterval(deletingInterval);
-          setPhase('pause');
+          setPhase("pause");
           setShowCursor(false);
 
           // Pause briefly before starting again
@@ -73,9 +73,7 @@ function TypingText({ text }: { text: string }) {
     <span>
       {displayedText}
       {showCursor && (
-        <span
-          className="inline-block w-0.5 h-4 bg-white ml-1 animate-blink-cursor"
-        />
+        <span className="inline-block w-0.5 h-4 bg-white ml-1 animate-blink-cursor" />
       )}
     </span>
   );
@@ -182,7 +180,7 @@ export default function HeroImageSlider() {
               className="text-lg sm:text-xl lg:text-2xl font-semibold leading-relaxed
                        text-white/95 mx-auto"
             >
-              Rasakan Serunya Bermain di
+              Rasakan Serunya Bermain
               <span className="block text-[#E1D0B3] font-bold mt-1">
                 Mini Soccer Terbaik di Lombok
               </span>
