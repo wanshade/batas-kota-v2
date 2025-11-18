@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Cardx } from "@/components/ui/cardField";
 import TimeSlotBookingForm from "@/components/time-slot-booking-form";
 import { formatRupiah } from "@/lib/currency";
 import { db, fields, bookings, users, bookingStatusEnum } from "@/db";
@@ -76,7 +77,7 @@ export default async function FieldDetailPage({
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <Card className="overflow-hidden">
+        <Cardx className="overflow-hidden">
           {field.imageUrl && (
             <div className="aspect-video bg-gray-200">
               <img
@@ -127,7 +128,7 @@ export default async function FieldDetailPage({
               />
             </div>
           </CardContent>
-        </Card>
+        </Cardx>
       </div>
     </div>
   );
