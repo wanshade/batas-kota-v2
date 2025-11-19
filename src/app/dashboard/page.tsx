@@ -128,7 +128,7 @@ export default function DashboardPage() {
               <div className="flex items-center gap-4">
                 <Skeleton className="h-12 w-12 bg-gray-200 rounded-xl" />
                 <div className="space-y-2">
-                  <Skeleton className="h-8 w-64 bg-gray-200 rounded-lg" />
+                  <Skeleton className="h-8 w-80 bg-gray-200 rounded-lg" />
                   <Skeleton className="h-4 w-96 bg-gray-200 rounded" />
                 </div>
               </div>
@@ -189,8 +189,38 @@ export default function DashboardPage() {
     .reduce((sum, b) => sum + b.amountPaid, 0);
 
   // Get recent bookings (last 5)
-  const recentBookings = bookings
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  // Group bookings by session (created within 1 minute of each other)
+  const groupBookingsBySession = (bookings: Booking[]) => {
+    const groups: Booking[][] = [];
+    const sortedBookings = [...bookings].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+    for (const booking of sortedBookings) {
+      const bookingTime = new Date(booking.createdAt).getTime();
+      const oneMinute = 60 * 1000; // 1 minute in milliseconds
+
+      // Try to find an existing group for this booking
+      let foundGroup = false;
+      for (const group of groups) {
+        const groupTime = new Date(group[0].createdAt).getTime();
+        if (Math.abs(bookingTime - groupTime) < oneMinute &&
+            booking.field.id === group[0].field.id &&
+            booking.status === group[0].status) {
+          group.push(booking);
+          foundGroup = true;
+          break;
+        }
+      }
+
+      if (!foundGroup) {
+        groups.push([booking]);
+      }
+    }
+
+    return groups;
+  };
+
+  const recentBookingGroups = groupBookingsBySession(bookings)
+    .sort((a, b) => new Date(b[0].createdAt).getTime() - new Date(a[0].createdAt).getTime())
     .slice(0, 5);
 
   return (
@@ -205,17 +235,17 @@ export default function DashboardPage() {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-1">
-                  Welcome back, {session?.user?.name?.split(" ")[0]}! 👋
+                  Selamat datang kembali, {session?.user?.name?.split(" ")[0]}! 👋
                 </h1>
                 <p className="text-gray-600">
-                  Manage your soccer field bookings and explore premium venues
+                  Kelola pemesanan lapangan sepak bola Anda dan jelajah venue premium
                 </p>
               </div>
             </div>
             <Link href="/fields">
               <Button className="bg-gradient-to-r from-[#703B3B] to-[#8B4F4F] hover:from-[#5a2f2f] hover:to-[#703B3B] text-white shadow-lg hover:shadow-xl transition-all duration-200">
                 <PlayCircle className="w-4 h-4 mr-2" />
-                Book New Field
+                Pesan Lapangan Baru
               </Button>
             </Link>
           </div>
@@ -233,14 +263,14 @@ export default function DashboardPage() {
                       <Calendar className="w-6 h-6 text-[#703B3B]" />
                     </div>
                     <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
-                      Total Bookings
+                      Total Pemesanan
                     </div>
                   </div>
                   <div className="text-4xl font-bold text-gray-900 mb-1">
                     {totalBookings}
                   </div>
                   <div className="text-sm text-gray-600">
-                    {totalBookings > 0 ? "Total bookings made" : "Start booking fields"}
+                    {totalBookings > 0 ? "Total pemesanan dibuat" : "Mulai pesan lapangan"}
                   </div>
                 </div>
 
@@ -251,14 +281,14 @@ export default function DashboardPage() {
                       <Clock className="w-6 h-6 text-[#8B4F4F]" />
                     </div>
                     <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
-                      Pending
+                      Menunggu
                     </div>
                   </div>
                   <div className="text-4xl font-bold text-gray-900 mb-1">
                     {pendingBookings}
                   </div>
                   <div className="text-sm text-gray-600">
-                    {pendingBookings > 0 ? "Awaiting confirmation" : "No pending bookings"}
+                    {pendingBookings > 0 ? "Menunggu konfirmasi" : "Tidak ada pemesanan menunggu"}
                   </div>
                 </div>
 
@@ -269,14 +299,14 @@ export default function DashboardPage() {
                       <CheckCircle2 className="w-6 h-6 text-[#703B3B]" />
                     </div>
                     <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
-                      Completed
+                      Selesai
                     </div>
                   </div>
                   <div className="text-4xl font-bold text-gray-900 mb-1">
                     {completedBookings}
                   </div>
                   <div className="text-sm text-gray-600">
-                    {completedBookings > 0 ? "Sessions completed" : "No completed sessions"}
+                    {completedBookings > 0 ? "Sesi selesai" : "Tidak ada sesi selesai"}
                   </div>
                 </div>
 
@@ -287,14 +317,14 @@ export default function DashboardPage() {
                       <DollarSign className="w-6 h-6 text-[#8B4F4F]" />
                     </div>
                     <div className="text-gray-600 font-medium text-sm uppercase tracking-wide">
-                      Total Spent
+                      Total Pengeluaran
                     </div>
                   </div>
                   <div className="text-3xl font-bold text-[#703B3B] mb-1">
                     {formatRupiah(totalSpent)}
                   </div>
                   <div className="text-sm text-gray-600">
-                    {totalSpent > 0 ? "Total amount spent" : "No spending yet"}
+                    {totalSpent > 0 ? "Total jumlah yang dikeluarkan" : "Belum ada pengeluaran"}
                   </div>
                 </div>
               </div>
@@ -310,11 +340,11 @@ export default function DashboardPage() {
                 <div className="w-8 h-8 bg-gradient-to-br from-[#703B3B] to-[#8B4F4F] rounded-lg flex items-center justify-center">
                   <BarChart3 className="w-4 h-4 text-white" />
                 </div>
-                <h2 className="text-xl font-semibold text-gray-900">Recent Bookings</h2>
+                <h2 className="text-xl font-semibold text-gray-900">Pemesanan Terbaru</h2>
               </div>
               <Link href="/bookings">
                 <Button variant="outline" className="border-[#E1D0B3] text-[#703B3B] hover:bg-[#F5F0E8] hover:border-[#703B3B]">
-                  View All
+                  Lihat Semua
                   <ArrowUpRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
@@ -327,14 +357,14 @@ export default function DashboardPage() {
                 <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <MapPin className="w-10 h-10 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">No bookings yet</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Belum ada pemesanan</h3>
                 <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                  Start exploring and booking premium soccer fields in your area
+                  Mulai jelajahi dan pesan lapangan sepak bola premium di area Anda
                 </p>
                 <Link href="/fields">
                   <Button className="bg-gradient-to-r from-[#703B3B] to-[#8B4F4F] hover:from-[#5a2f2f] hover:to-[#703B3B] text-white px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200">
                     <Target className="w-4 h-4 mr-2" />
-                    Explore Fields
+                    Jelajahi Lapangan
                   </Button>
                 </Link>
               </div>
@@ -343,91 +373,113 @@ export default function DashboardPage() {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-[#E1D0B3]/20">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Field</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Date</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Time</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Duration</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Payment</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Amount</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Lapangan</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Tanggal</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Waktu</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Durasi</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Jumlah</th>
                       <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900">Status</th>
-                      <th className="text-center py-3 px-4 text-sm font-semibold text-gray-900">Actions</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-gray-900">Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {recentBookings.map((booking, index) => (
-                      <tr
-                        key={booking.id}
-                        className={`border-b border-[#E1D0B3]/10 hover:bg-[#F5F0E8]/30 transition-colors duration-200 ${
-                          index === recentBookings.length - 1 ? 'border-b-0' : ''
-                        }`}
-                      >
-                        <td className="py-4 px-4">
-                          <div className="font-medium text-gray-900">{booking.field.name}</div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div className="text-gray-700">
-                            {format(new Date(booking.startTime), "MMM d, yyyy")}
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div className="text-gray-700">
-                            {format(new Date(booking.startTime), "h:mm a")} - {format(new Date(booking.endTime), "h:mm a")}
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div className="text-gray-700">
-                            {Math.round((new Date(booking.endTime).getTime() - new Date(booking.startTime).getTime()) / (1000 * 60 * 60))}h
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div className="text-gray-700">
-                            {booking.paymentType === "DEPOSIT" ? "Deposit" : "Full Payment"}
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div>
-                            <div className="font-bold text-[#703B3B]">
-                              {formatRupiah(booking.amountPaid)}
-                            </div>
-                            {booking.paymentType === "DEPOSIT" && (
-                              <div className="text-xs text-gray-500">
-                                +{formatRupiah(booking.field.pricePerHour * Math.round((new Date(booking.endTime).getTime() - new Date(booking.startTime).getTime()) / (1000 * 60 * 60)) - booking.amountPaid)} on-site
+                    {recentBookingGroups.map((bookingGroup, groupIndex) => {
+                      const mainBooking = bookingGroup[0];
+                      const totalAmount = bookingGroup.reduce((sum, b) => sum + b.amountPaid, 0);
+                      const totalDuration = bookingGroup.reduce((sum, b) =>
+                        sum + Math.round((new Date(b.endTime).getTime() - new Date(b.startTime).getTime()) / (1000 * 60 * 60)), 0
+                      );
+                      const allDates = [...new Set(bookingGroup.map(b => format(new Date(b.startTime), "d MMM yyyy")))];
+                      const allTimes = bookingGroup.map(b =>
+                        `${format(new Date(b.startTime), "h:mm a")} - ${format(new Date(b.endTime), "h:mm a")}`
+                      );
+
+                      return (
+                        <tr
+                          key={`${mainBooking.id}-group`}
+                          className={`border-b border-[#E1D0B3]/10 hover:bg-[#F5F0E8]/30 transition-colors duration-200 ${
+                            groupIndex === recentBookingGroups.length - 1 ? 'border-b-0' : ''
+                          }`}
+                        >
+                          <td className="py-4 px-4">
+                            <div className="font-medium text-gray-900">{mainBooking.field.name}</div>
+                            {bookingGroup.length > 1 && (
+                              <div className="text-xs text-[#703B3B] font-medium mt-1">
+                                {bookingGroup.length} slot terkait
                               </div>
                             )}
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <Badge
-                            className={`${getStatusColor(booking.status)} border font-medium flex items-center gap-2 w-fit`}
-                          >
-                            {getStatusIcon(booking.status)}
-                            {booking.status}
-                          </Badge>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div className="flex items-center justify-center gap-2">
-                            {booking.status === "PENDING" && !booking.proofImageUrl && (
-                              <Button
-                                size="sm"
-                                className="bg-gradient-to-r from-[#703B3B] to-[#8B4F4F] hover:from-[#5a2f2f] hover:to-[#703B3B] text-white shadow-md hover:shadow-lg transition-all duration-200"
-                                onClick={() => {
-                                  setSelectedBooking(booking);
-                                  setPaymentModalOpen(true);
-                                }}
-                              >
-                                <CreditCard className="w-4 h-4 mr-2" />
-                                Upload
-                              </Button>
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="text-gray-700">
+                              {allDates.length === 1 ? allDates[0] : `${allDates.length} tanggal`}
+                            </div>
+                            {allDates.length > 1 && (
+                              <div className="text-xs text-gray-500 mt-1">
+                                {allDates.join(", ")}
+                              </div>
                             )}
-                            <Button asChild variant="outline" size="sm" className="border-[#E1D0B3] text-[#703B3B] hover:bg-[#F5F0E8]">
-                              <Link href={`/bookings/${booking.id}`}>
-                                Details
-                              </Link>
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="text-gray-700">
+                              {bookingGroup.length === 1 ? allTimes[0] : `${bookingGroup.length} slot`}
+                            </div>
+                            {bookingGroup.length > 1 && (
+                              <div className="text-xs text-gray-500 mt-1 max-w-xs truncate">
+                                {allTimes.slice(0, 2).join(", ")}
+                                {allTimes.length > 2 && ` +${allTimes.length - 2} lainnya`}
+                              </div>
+                            )}
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="text-gray-700">
+                              {totalDuration}h
+                            </div>
+                            {bookingGroup.length > 1 && (
+                              <div className="text-xs text-gray-500">
+                                {bookingGroup.length} slot × avg {Math.round(totalDuration / bookingGroup.length)}h
+                              </div>
+                            )}
+                          </td>
+                          <td className="py-4 px-4">
+                            <div>
+                              <div className="font-bold text-[#703B3B]">
+                                {formatRupiah(totalAmount)}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-4">
+                            <Badge
+                              className={`${getStatusColor(mainBooking.status)} border font-medium flex items-center gap-2 w-fit`}
+                            >
+                              {getStatusIcon(mainBooking.status)}
+                              {mainBooking.status}
+                            </Badge>
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="flex items-center justify-center gap-2">
+                              {mainBooking.status === "PENDING" && !mainBooking.proofImageUrl && (
+                                <Button
+                                  size="sm"
+                                  className="bg-gradient-to-r from-[#703B3B] to-[#8B4F4F] hover:from-[#5a2f2f] hover:to-[#703B3B] text-white shadow-md hover:shadow-lg transition-all duration-200"
+                                  onClick={() => {
+                                    setSelectedBooking(mainBooking);
+                                    setPaymentModalOpen(true);
+                                  }}
+                                >
+                                  <CreditCard className="w-4 h-4 mr-2" />
+                                  Upload
+                                </Button>
+                              )}
+                              <Button asChild variant="outline" size="sm" className="border-[#E1D0B3] text-[#703B3B] hover:bg-[#F5F0E8]">
+                                <Link href={`/bookings/${mainBooking.id}`}>
+                                  Detail
+                                </Link>
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

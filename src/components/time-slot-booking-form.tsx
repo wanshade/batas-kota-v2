@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { format } from "date-fns"
-import BookingSuccessModal from "@/components/booking-success-modal"
 import { formatRupiah } from "@/lib/currency"
 import { getAvailableTimeSlots, getTimeSlotPrice, parseTimeSlot, TimeSlot } from "@/lib/schedule"
 import { Clock, CheckCircle, User } from "lucide-react"
@@ -47,8 +46,6 @@ export default function TimeSlotBookingForm({ fieldId, fieldName, existingBookin
   // Local state
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
-  const [bookingDetails, setBookingDetails] = useState<any>(null)
   const [availableTimeSlots, setAvailableTimeSlots] = useState<TimeSlot[]>([])
   const [pricing, setPricing] = useState({ deposit: 0, remaining: 0, total: 0 })
 
@@ -202,67 +199,60 @@ export default function TimeSlotBookingForm({ fieldId, fieldName, existingBookin
     const pricing = await calculatePrice()
 
     try {
-      // Create bookings for each date
-      const bookingPromises = []
+      // Create a single booking with multiple time slots
+      const allSelectedSlots = getAllSelectedSlots()
+      const timeSlotsForApi = allSelectedSlots.map(({ date, slots }) =>
+        slots.map(slot => ({ date, slot }))
+      ).flat()
 
-      
-      for (const { date: bookingDate, slots } of allSelectedSlots) {
-        for (const slotJam of slots) {
-          const { start, end } = parseTimeSlot(slotJam)
-          const startTime = new Date(`${bookingDate}T${start}`).toISOString()
-          const endTime = new Date(`${bookingDate}T${end}`).toISOString()
+      const response = await fetch("/api/bookings/multi-slot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fieldId,
+          timeSlots: timeSlotsForApi,
+          paymentType: formData.paymentType,
+          namaTim: formData.namaTim,
+          noWhatsapp: formData.noWhatsapp
+        }),
+      })
 
-          
-          const bookingPromise = fetch("/api/bookings", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              fieldId,
-              date: bookingDate,
-              startTime,
-              endTime,
-              paymentType: formData.paymentType,
-              amountPaid: 0, // Server will calculate the correct amount
-              namaTim: formData.namaTim,
-              noWhatsapp: formData.noWhatsapp
-            }),
-          })
+      const data = await response.json()
 
-          bookingPromises.push(bookingPromise)
-        }
-      }
-
-      // Execute all bookings in parallel
-      const responses = await Promise.all(bookingPromises)
-
-      // Check if any bookings failed
-      const failedBookings = responses.filter(response => !response.ok)
-
-      if (failedBookings.length > 0) {
-        const errorPromises = failedBookings.map(response => response.json())
-        const errors = await Promise.all(errorPromises)
-        const errorMessages = errors.map(err => err.error || "Booking failed")
-        setError(`Some bookings failed: ${errorMessages.join(", ")}`)
+      if (!response.ok) {
+        setError(data.error || "Failed to create booking")
         setIsLoading(false)
         return
       }
 
-      // All bookings created successfully - server calculated amounts correctly
-      const successfulBookings = await Promise.all(responses.map(response => response.json()))
+      // Store the selected slots before clearing
+      const currentSelectedSlots = getAllSelectedSlots()
 
-      setBookingDetails({
-        fieldName,
-        dates: allSelectedSlots.map(({ date, slots }) => ({ date, slots })),
-        totalSlots: allSelectedSlots.reduce((acc, { slots }) => acc + slots.length, 0),
-        amount: pricing.deposit || pricing.total,
-        paymentType: formData.paymentType
-      })
-      setShowSuccessModal(true)
+      // Create booking data for the payment page
+      const bookingData = {
+        bookingId: data.booking?.bookings?.[0]?.id || 'unknown',
+        fieldName: fieldName,
+        timeSlots: currentSelectedSlots.map(({ date, slots }) =>
+          slots.map(slot => ({ date, slot }))
+        ).flat(),
+        totalAmount: data.booking?.totalAmount || 0,
+        amountPaid: data.booking?.amountPaid || 0,
+        paymentType: data.booking?.paymentType || 'FULL',
+        slotCount: data.booking?.slotCount || 0,
+        namaTim: formData.namaTim,
+        noWhatsapp: formData.noWhatsapp
+      }
+
+      // Encode booking data for URL
+      const encodedBookingData = btoa(JSON.stringify(bookingData))
 
       // Clear all selected slots after successful booking
       clearAllSlots()
+
+      // Redirect to payment page
+      router.push(`/bookings/payment?booking=${encodedBookingData}`)
     } catch (error) {
       setError("Something went wrong. Please try again.")
     } finally {
@@ -492,23 +482,6 @@ export default function TimeSlotBookingForm({ fieldId, fieldName, existingBookin
           {isLoading ? "Creating Booking..." : "Book Now"}
         </Button>
       </form>
-
-      {bookingDetails && (
-        <BookingSuccessModal
-          isOpen={showSuccessModal}
-          onClose={() => {
-            setShowSuccessModal(false)
-            router.push("/dashboard")
-          }}
-          fieldName={bookingDetails.fieldName}
-          date={bookingDetails.dates?.[0]?.date || ''}
-          startTime={bookingDetails.dates?.[0]?.slots?.[0] || ''}
-          endTime={bookingDetails.dates?.[0]?.slots?.[bookingDetails.dates[0].slots.length - 1] || ''}
-          amount={bookingDetails.amount}
-          paymentType={bookingDetails.paymentType}
-          slotCount={bookingDetails.totalSlots}
-        />
-      )}
     </>
   )
 }

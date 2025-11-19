@@ -82,18 +82,18 @@ export default function LoginPage() {
     return {
       title:
         isAdmin && !hasCallbackUrl
-          ? "🎯 Admin Access Granted!"
-          : "🎉 Welcome Back!",
+          ? "🎯 Akses Admin Diberikan!"
+          : "🎉 Selamat Datang Kembali!",
       message: hasCallbackUrl
-        ? "Great to see you again! You'll be redirected back to complete your booking."
+        ? "Senang melihat Anda lagi! Anda akan dialihkan kembali untuk menyelesaikan pemesanan Anda."
         : isAdmin
-        ? "Welcome back, Administrator! You now have access to manage the entire soccer field booking system."
-        : "Great to see you again! You've successfully logged in and are ready to book your next soccer field.",
+        ? "Selamat datang kembali, Administrator! Anda sekarang memiliki akses untuk mengelola seluruh sistem pemesanan lapangan sepak bola."
+        : "Senang melihat Anda lagi! Anda telah berhasil masuk dan siap untuk memesan lapangan sepak bola Anda berikutnya.",
       buttonText: hasCallbackUrl
-        ? "Continue to Booking"
+        ? "Lanjutkan ke Pemesanan"
         : isAdmin
-        ? "Go to Admin Dashboard"
-        : "Go to Dashboard",
+        ? "Ke Dashboard Admin"
+        : "Ke Dashboard",
     };
   };
 
@@ -124,14 +124,14 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError("Invalid email or password");
+        setError("Email atau kata sandi tidak valid");
       } else {
         // Refresh session to get user role information
         await getSession();
         setShowSuccessModal(true);
       }
     } catch (error) {
-      setError("Something went wrong. Please try again.");
+      setError("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setIsLoading(false);
     }
@@ -152,16 +152,16 @@ export default function LoginPage() {
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-20 h-20 mb-4">
               <img
-                src="/logo.png"
+                src="/logo1.png"
                 alt="Batas Kota Logo"
                 className="h-full w-full object-contain"
               />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Welcome Back
+              Selamat Datang Kembali
             </h1>
             <p className="text-gray-600">
-              Sign in to access your soccer field bookings
+              Masuk untuk mengakses pemesanan lapangan sepak bola Anda
             </p>
           </div>
 
@@ -169,24 +169,24 @@ export default function LoginPage() {
           <div className="flex justify-center gap-8 mb-6">
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <Shield className="w-4 h-4 text-[#703B3B]" />
-              <span>Secure</span>
+              <span>Aman</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <Users className="w-4 h-4 text-[#703B3B]" />
-              <span>1000+ Players</span>
+              <span>1000+ Pemain</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <Clock className="w-4 h-4 text-[#703B3B]" />
-              <span>24/7 Access</span>
+              <span>Akses 24/7</span>
             </div>
           </div>
 
           <Card className="shadow-xl border border-[#E1D0B3]/50 bg-white/90 backdrop-blur-sm">
             <CardHeader className="space-y-2 pb-6">
-              <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
+              <CardTitle className="text-2xl font-bold">Masuk</CardTitle>
               <CardDescription className="text-gray-600">
-                Enter your credentials to access your account and manage your
-                bookings
+                Masukkan kredensial Anda untuk mengakses akun dan kelola
+                pemesanan Anda
               </CardDescription>
             </CardHeader>
 
@@ -199,7 +199,7 @@ export default function LoginPage() {
                     className="flex items-center gap-2 text-sm font-medium"
                   >
                     <Mail className="w-4 h-4 text-gray-500" />
-                    Email Address
+                    Alamat Email
                   </Label>
                   <div className="relative">
                     <Input
@@ -224,13 +224,13 @@ export default function LoginPage() {
                     className="flex items-center gap-2 text-sm font-medium"
                   >
                     <Lock className="w-4 h-4 text-gray-500" />
-                    Password
+                    Kata Sandi
                   </Label>
                   <div className="relative">
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
+                      placeholder="Masukkan kata sandi Anda"
                       value={formData.password}
                       onChange={(e) =>
                         handleInputChange("password", e.target.value)
@@ -270,10 +270,10 @@ export default function LoginPage() {
                   {isLoading ? (
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Signing in...
+                      Masuk...
                     </div>
                   ) : (
-                    "Sign In"
+                    "Masuk"
                   )}
                 </Button>
               </form>
@@ -282,30 +282,30 @@ export default function LoginPage() {
 
               <div className="text-center space-y-4">
                 <p className="text-sm text-gray-600">
-                  Don&apos;t have an account?{" "}
+                  Belum punya akun?{" "}
                   <Link
                     href="/register"
                     className="text-[#703B3B] hover:text-[#5a2f2f] font-medium underline-offset-4 hover:underline transition-colors"
                   >
-                    Create account here
+                    Buat akun di sini
                   </Link>
                 </p>
 
                 <div className="text-xs text-gray-500">
-                  <p>By signing in, you agree to our</p>
+                  <p>Dengan masuk, Anda menyetujui</p>
                   <div className="flex justify-center gap-2">
                     <Link
                       href="/terms"
                       className="text-[#703B3B] hover:text-[#5a2f2f] underline"
                     >
-                      Terms of Service
+                      Syarat & Ketentuan
                     </Link>
-                    <span>and</span>
+                    <span>dan</span>
                     <Link
                       href="/privacy"
                       className="text-[#703B3B] hover:text-[#5a2f2f] underline"
                     >
-                      Privacy Policy
+                      Kebijakan Privasi
                     </Link>
                   </div>
                 </div>

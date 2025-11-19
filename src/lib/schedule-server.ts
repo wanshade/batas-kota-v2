@@ -76,3 +76,6 @@ export function getTimeSlotPriceServer(date: Date, timeSlot: string): number {
     return 0
   }
 }
+
+// Re-export parseTimeSlot for convenience
+export { parseTimeSlot }

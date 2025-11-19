@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { CheckCircle2, Calendar, Clock, DollarSign } from "lucide-react"
+import { CheckCircle2, Calendar, Clock, DollarSign, Building, CreditCard } from "lucide-react"
 
 interface BookingSuccessModalProps {
   isOpen: boolean
@@ -183,6 +183,33 @@ export default function BookingSuccessModal({
                 Sisa pembayaran akan dilunasi di lokasi
               </p>
             )}
+          </div>
+
+          {/* Payment Information */}
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+            <div className="text-sm font-medium text-blue-900 mb-3 flex items-center">
+              <CreditCard className="w-4 h-4 mr-2" />
+              Informasi Pembayaran
+            </div>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Nama Penerima:</span>
+                <span className="font-semibold text-gray-900">CV BATAS KOTA POINT</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Bank Tujuan:</span>
+                <span className="font-semibold text-gray-900">MANDIRI</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">No. Rekening:</span>
+                <span className="font-semibold text-gray-900 font-mono">161-001-647-5977</span>
+              </div>
+            </div>
+            <div className="mt-3 pt-3 border-t border-blue-200">
+              <p className="text-xs text-blue-700">
+                Silakan transfer ke rekening di atas dan upload bukti pembayaran untuk konfirmasi pemesanan.
+              </p>
+            </div>
           </div>
 
           {/* Next Steps */}

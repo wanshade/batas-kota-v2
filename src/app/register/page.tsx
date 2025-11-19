@@ -38,25 +38,25 @@ const registrationSchema = z
   .object({
     name: z
       .string()
-      .min(2, "Name must be at least 2 characters")
-      .max(50, "Name must be less than 50 characters"),
+      .min(2, "Nama harus memiliki setidaknya 2 karakter")
+      .max(50, "Nama harus kurang dari 50 karakter"),
     email: z
       .string()
-      .min(1, "Email is required")
-      .email("Please enter a valid email address"),
+      .min(1, "Email wajib diisi")
+      .email("Masukkan alamat email yang valid"),
     phone: z
       .string()
-      .min(10, "Phone number must be at least 10 digits")
-      .max(20, "Phone number must be less than 20 digits")
-      .regex(/^[+]?[0-9\s-]+$/, "Please enter a valid phone number"),
+      .min(10, "Nomor telepon harus memiliki setidaknya 10 digit")
+      .max(20, "Nomor telepon harus kurang dari 20 digit")
+      .regex(/^[+]?[0-9\s-]+$/, "Masukkan nomor telepon yang valid"),
     password: z
       .string()
-      .min(6, "Password must be at least 6 characters")
-      .max(100, "Password must be less than 100 characters"),
+      .min(6, "Kata sandi harus memiliki setidaknya 6 karakter")
+      .max(100, "Kata sandi harus kurang dari 100 karakter"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: "Kata sandi tidak cocok",
     path: ["confirmPassword"],
   });
 
@@ -118,19 +118,19 @@ export default function RegisterPage() {
     const feedback: string[] = [];
 
     if (password.length >= 6) score += 20;
-    else feedback.push("Use at least 6 characters");
+    else feedback.push("Gunakan setidaknya 6 karakter");
 
     if (/[A-Z]/.test(password)) score += 20;
-    else feedback.push("Include uppercase letter");
+    else feedback.push("Sertakan huruf besar");
 
     if (/[a-z]/.test(password)) score += 20;
-    else feedback.push("Include lowercase letter");
+    else feedback.push("Sertakan huruf kecil");
 
     if (/[0-9]/.test(password)) score += 20;
-    else feedback.push("Include a number");
+    else feedback.push("Sertakan angka");
 
     if (/[^A-Za-z0-9]/.test(password)) score += 20;
-    else feedback.push("Include special character");
+    else feedback.push("Sertakan karakter khusus");
 
     let color = "bg-red-500";
     if (score >= 80) color = "bg-green-500";
@@ -231,7 +231,7 @@ export default function RegisterPage() {
       const registerData = await registerResponse.json();
 
       if (!registerResponse.ok) {
-        setError(registerData.error || "Something went wrong");
+        setError(registerData.error || "Terjadi kesalahan");
         return;
       }
 
@@ -253,7 +253,7 @@ export default function RegisterPage() {
         setShowSuccessModal(true);
       }
     } catch (error) {
-      setError("Something went wrong. Please try again.");
+      setError("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setIsLoading(false);
     }
@@ -284,16 +284,16 @@ export default function RegisterPage() {
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-20 h-20 mb-4">
               <img
-                src="/logo.png"
+                src="/logo1.png"
                 alt="Batas Kota Logo"
                 className="h-full w-full object-contain"
               />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Join Batas Kota
+              Bergabung dengan Batas Kota
             </h1>
             <p className="text-gray-600">
-              Create your account and start booking soccer fields
+              Buat akun Anda dan mulai pesan lapangan mini soccer
             </p>
           </div>
 
@@ -301,31 +301,29 @@ export default function RegisterPage() {
           <div className="flex justify-center gap-8 mb-6">
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <Shield className="w-4 h-4 text-[#703B3B]" />
-              <span>Secure</span>
+              <span>Aman</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <Users className="w-4 h-4 text-[#703B3B]" />
-              <span>1000+ Players</span>
+              <span>1000+ Pemain</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <Clock className="w-4 h-4 text-[#703B3B]" />
-              <span>Instant Access</span>
+              <span>Akses Instan</span>
             </div>
           </div>
 
           <Card className="shadow-xl border border-[#E1D0B3]/50 bg-white/90 backdrop-blur-sm">
             <CardHeader className="space-y-2 pb-6">
               <div className="flex justify-between items-center mb-2">
-                <CardTitle className="text-2xl font-bold">
-                  Create Account
-                </CardTitle>
+                <CardTitle className="text-2xl font-bold">Buat Akun</CardTitle>
                 <span className="text-sm text-gray-500">
                   {Math.round(formProgress)}%
                 </span>
               </div>
               <Progress value={formProgress} className="h-2" />
               <CardDescription className="text-gray-600">
-                Fill in your details to get started with your soccer journey
+                Isi detail Anda untuk memulai perjalanan sepak bola Anda
               </CardDescription>
             </CardHeader>
 
@@ -338,7 +336,7 @@ export default function RegisterPage() {
                     className="flex items-center gap-2 text-sm font-medium"
                   >
                     <User className="w-4 h-4 text-gray-500" />
-                    Full Name
+                    Nama Lengkap
                   </Label>
                   <div className="relative">
                     <Input
@@ -382,7 +380,7 @@ export default function RegisterPage() {
                     className="flex items-center gap-2 text-sm font-medium"
                   >
                     <Mail className="w-4 h-4 text-gray-500" />
-                    Email Address
+                    Alamat Email
                   </Label>
                   <div className="relative">
                     <Input
@@ -426,7 +424,7 @@ export default function RegisterPage() {
                     className="flex items-center gap-2 text-sm font-medium"
                   >
                     <Phone className="w-4 h-4 text-gray-500" />
-                    Phone Number
+                    Nomor Telepon
                   </Label>
                   <div className="relative">
                     <Input
@@ -470,14 +468,14 @@ export default function RegisterPage() {
                     className="flex items-center gap-2 text-sm font-medium"
                   >
                     <Lock className="w-4 h-4 text-gray-500" />
-                    Password
+                    Kata Sandi
                   </Label>
                   <div className="relative">
                     <Input
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
+                      placeholder="Masukkan kata sandi Anda"
                       value={formData.password}
                       onChange={(e) =>
                         handleInputChange("password", e.target.value)
@@ -522,7 +520,7 @@ export default function RegisterPage() {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-gray-600">
-                          Password strength
+                          Kekuatan kata sandi
                         </span>
                         <span className="text-xs text-gray-600">
                           {passwordStrength.score}%
@@ -552,14 +550,14 @@ export default function RegisterPage() {
                     className="flex items-center gap-2 text-sm font-medium"
                   >
                     <Lock className="w-4 h-4 text-gray-500" />
-                    Confirm Password
+                    Konfirmasi Kata Sandi
                   </Label>
                   <div className="relative">
                     <Input
                       id="confirmPassword"
                       name="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Confirm your password"
+                      placeholder="Konfirmasi kata sandi Anda"
                       value={formData.confirmPassword}
                       onChange={(e) =>
                         handleInputChange("confirmPassword", e.target.value)
@@ -621,11 +619,11 @@ export default function RegisterPage() {
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                       {autoLoginAttempted
-                        ? "Creating account and logging in..."
-                        : "Creating account..."}
+                        ? "Membuat akun dan masuk..."
+                        : "Membuat akun..."}
                     </div>
                   ) : (
-                    "Create Account"
+                    "Buat Akun"
                   )}
                 </Button>
               </form>
@@ -634,30 +632,30 @@ export default function RegisterPage() {
 
               <div className="text-center space-y-4">
                 <p className="text-sm text-gray-600">
-                  Already have an account?{" "}
+                  Sudah punya akun?{" "}
                   <Link
                     href="/login"
                     className="text-[#703B3B] hover:text-[#5a2f2f] font-medium underline-offset-4 hover:underline transition-colors"
                   >
-                    Sign in here
+                    Masuk di sini
                   </Link>
                 </p>
 
                 <div className="text-xs text-gray-500 space-y-1">
-                  <p>By creating an account, you agree to our</p>
+                  <p>Dengan membuat akun, Anda menyetujui</p>
                   <div className="flex justify-center gap-2">
                     <Link
                       href="/terms"
                       className="text-[#703B3B] hover:text-[#5a2f2f] underline"
                     >
-                      Terms of Service
+                      Syarat & Ketentuan
                     </Link>
-                    <span>and</span>
+                    <span>dan</span>
                     <Link
                       href="/privacy"
                       className="text-[#703B3B] hover:text-[#5a2f2f] underline"
                     >
-                      Privacy Policy
+                      Kebijakan Privasi
                     </Link>
                   </div>
                 </div>
@@ -673,9 +671,9 @@ export default function RegisterPage() {
           setShowSuccessModal(false);
           router.push("/dashboard");
         }}
-        title="Welcome to Batas Kota! 🎉"
-        message="Your account has been created successfully and you're now logged in. Let's start booking soccer fields!"
-        buttonText="Go to Dashboard"
+        title="Selamat Datang di Batas Kota! 🎉"
+        message="Akun Anda telah berhasil dibuat dan Anda sekarang sudah masuk. Mari mulai pesan lapangan sepak bola!"
+        buttonText="Ke Dashboard"
       />
     </>
   );

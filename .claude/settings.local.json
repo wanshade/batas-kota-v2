@@ -42,7 +42,9 @@
       "Bash(git branch:*)",
       "Bash(git remote set-url:*)",
       "Bash(git pull:*)",
-      "mcp___magicuidesign_mcp__getTextAnimations"
+      "mcp___magicuidesign_mcp__getTextAnimations",
+      "Bash(printf:*)",
+      "Bash(npm run db:push:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

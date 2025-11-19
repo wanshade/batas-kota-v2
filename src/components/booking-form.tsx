@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { format } from "date-fns"
-import BookingSuccessModal from "@/components/booking-success-modal"
 import { formatRupiah } from "@/lib/currency"
 
 interface Booking {
@@ -30,14 +29,14 @@ export default function BookingForm({ fieldId, fieldName, pricePerHour, existing
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
-  const [bookingDetails, setBookingDetails] = useState<any>(null)
 
   const [formData, setFormData] = useState({
     date: "",
     startTime: "",
     duration: "1",
-    paymentType: "FULL"
+    paymentType: "FULL",
+    namaTim: "",
+    noWhatsapp: ""
   })
 
   const handleInputChange = (field: string, value: string) => {
@@ -131,7 +130,9 @@ export default function BookingForm({ fieldId, fieldName, pricePerHour, existing
           startTime: new Date(`${formData.date}T${formData.startTime}`).toISOString(),
           endTime: endTime.toISOString(),
           paymentType: formData.paymentType,
-          amountPaid: pricing.deposit || pricing.total
+          amountPaid: pricing.deposit || pricing.total,
+          namaTim: formData.namaTim,
+          noWhatsapp: formData.noWhatsapp
         }),
       })
 
@@ -140,15 +141,32 @@ export default function BookingForm({ fieldId, fieldName, pricePerHour, existing
       if (!response.ok) {
         setError(data.error || "Failed to create booking")
       } else {
-        setBookingDetails({
-          fieldName,
-          date: formData.date,
-          startTime: new Date(`${formData.date}T${formData.startTime}`).toISOString(),
-          endTime: endTime!.toISOString(),
-          amount: pricing.deposit || pricing.total,
-          paymentType: formData.paymentType
-        })
-        setShowSuccessModal(true)
+        // Create booking data for the payment page
+        const bookingData = {
+          bookingId: data.booking?.id || 'unknown',
+          fieldName: fieldName,
+          timeSlots: [{
+            date: formData.date,
+            slot: `${formData.startTime} - ${(() => {
+              const start = new Date(`${formData.date}T${formData.startTime}`)
+              const duration = parseInt(formData.duration)
+              const end = new Date(start.getTime() + duration * 60 * 60 * 1000)
+              return end.toTimeString().slice(0, 5)
+            })()}`
+          }],
+          totalAmount: pricing.total,
+          amountPaid: pricing.deposit || pricing.total,
+          paymentType: formData.paymentType,
+          slotCount: 1,
+          namaTim: formData.namaTim || 'Your Team',
+          noWhatsapp: formData.noWhatsapp || 'Your WhatsApp'
+        }
+
+        // Encode booking data for URL
+        const encodedBookingData = btoa(JSON.stringify(bookingData))
+
+        // Redirect to payment page
+        router.push(`/bookings/payment?booking=${encodedBookingData}`)
       }
     } catch (error) {
       setError("Something went wrong. Please try again.")
@@ -214,6 +232,30 @@ export default function BookingForm({ fieldId, fieldName, pricePerHour, existing
           </Select>
         </div>
 
+        <div className="space-y-2">
+          <Label htmlFor="namaTim">Team Name</Label>
+          <Input
+            id="namaTim"
+            type="text"
+            placeholder="Enter your team name"
+            value={formData.namaTim}
+            onChange={(e) => handleInputChange("namaTim", e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="noWhatsapp">WhatsApp Number</Label>
+          <Input
+            id="noWhatsapp"
+            type="tel"
+            placeholder="08xx-xxxx-xxxx or 62xxx-xxxx-xxxx"
+            value={formData.noWhatsapp}
+            onChange={(e) => handleInputChange("noWhatsapp", e.target.value)}
+            required
+          />
+        </div>
+
         {endTime && (
           <div className="bg-gray-50 p-3 rounded-lg">
             <div className="text-sm">
@@ -266,22 +308,6 @@ export default function BookingForm({ fieldId, fieldName, pricePerHour, existing
           {isLoading ? "Creating Booking..." : "Book Now"}
         </Button>
       </form>
-
-      {bookingDetails && (
-        <BookingSuccessModal
-          isOpen={showSuccessModal}
-          onClose={() => {
-            setShowSuccessModal(false)
-            router.push("/dashboard")
-          }}
-          fieldName={bookingDetails.fieldName}
-          date={bookingDetails.date}
-          startTime={bookingDetails.startTime}
-          endTime={bookingDetails.endTime}
-          amount={bookingDetails.amount}
-          paymentType={bookingDetails.paymentType}
-        />
-      )}
     </>
   )
 }

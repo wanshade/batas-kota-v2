@@ -198,7 +198,39 @@ export default function EnhancedBookingsPage() {
     }
   }
 
-  
+  // Group bookings by session (created within 1 minute of each other)
+  const groupBookingsBySession = (bookings: Booking[]) => {
+    const groups: Booking[][] = [];
+    const sortedBookings = [...bookings].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+    for (const booking of sortedBookings) {
+      const bookingTime = new Date(booking.createdAt).getTime();
+      const oneMinute = 60 * 1000; // 1 minute in milliseconds
+
+      // Try to find an existing group for this booking
+      let foundGroup = false;
+      for (const group of groups) {
+        const groupTime = new Date(group[0].createdAt).getTime();
+        if (Math.abs(bookingTime - groupTime) < oneMinute &&
+            booking.field.name === group[0].field.name &&
+            booking.user.email === group[0].user.email &&
+            booking.status === group[0].status) {
+          group.push(booking);
+          foundGroup = true;
+          break;
+        }
+      }
+
+      if (!foundGroup) {
+        groups.push([booking]);
+      }
+    }
+
+    return groups;
+  };
+
+  const bookingGroups = groupBookingsBySession(bookings)
+    .sort((a, b) => new Date(b[0].createdAt).getTime() - new Date(a[0].createdAt).getTime());
   return (
     <AdminLayout
       title="Booking Management"
@@ -355,85 +387,120 @@ export default function EnhancedBookingsPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {bookings.map((booking) => (
-                      <TableRow key={booking.id} className="hover:bg-gray-50">
-                        <TableCell className="font-medium">
-                          <div>
-                            <div className="font-semibold">{booking.field.name}</div>
+                    {bookingGroups.map((bookingGroup, groupIndex) => {
+                      const mainBooking = bookingGroup[0];
+                      const totalAmount = bookingGroup.reduce((sum, b) => sum + b.amountPaid, 0);
+                      const totalDuration = bookingGroup.reduce((sum, b) =>
+                        sum + Math.round((new Date(b.endTime).getTime() - new Date(b.startTime).getTime()) / (1000 * 60 * 60)), 0
+                      );
+                      const allDates = [...new Set(bookingGroup.map(b => format(new Date(b.startTime), "MMM d, yyyy")))];
+                      const allTimes = bookingGroup.map(b =>
+                        `${format(new Date(b.startTime), "h:mm a")} - ${format(new Date(b.endTime), "h:mm a")}`
+                      );
+
+                      return (
+                        <TableRow key={`${mainBooking.id}-group`} className="hover:bg-gray-50">
+                          <TableCell className="font-medium">
+                            <div>
+                              <div className="font-semibold">{mainBooking.field.name}</div>
+                              <div className="text-sm text-gray-500">
+                                {formatRupiah(mainBooking.field.pricePerHour)}/hr
+                              </div>
+                              {bookingGroup.length > 1 && (
+                                <div className="text-xs text-blue-600 font-medium mt-1">
+                                  {bookingGroup.length} slot terkait
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="font-medium">{mainBooking.namaTim || '-'}</div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="font-medium">{mainBooking.noWhatsapp || '-'}</div>
+                          </TableCell>
+                          <TableCell>
+                            <div>
+                              <div className="font-medium">{mainBooking.user.name}</div>
+                              <div className="text-sm text-gray-500">{mainBooking.user.email}</div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div>
+                              <div>{allDates.length === 1 ? allDates[0] : `${allDates.length} dates`}</div>
+                              <div className="text-sm text-gray-500">
+                                {bookingGroup.length === 1 ? allTimes[0] : `${bookingGroup.length} slots`}
+                              </div>
+                              <div className="text-xs text-gray-400 mt-1">
+                                Booked: {format(new Date(mainBooking.createdAt), "MMM d, yyyy h:mm a")}
+                              </div>
+                              {bookingGroup.length > 1 && (
+                                <details className="text-xs text-blue-600 cursor-pointer">
+                                  <summary>View all slots</summary>
+                                  <div className="mt-1 pl-2 text-gray-600">
+                                    {allTimes.map((time, i) => (
+                                      <div key={i}>• {time}</div>
+                                    ))}
+                                  </div>
+                                </details>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="font-medium">{formatRupiah(totalAmount)}</div>
                             <div className="text-sm text-gray-500">
-                              {formatRupiah(booking.field.pricePerHour)}/hr
+                              {totalDuration}h total
+                              {bookingGroup.length > 1 && (
+                                <span> • {bookingGroup.length} slots</span>
+                              )}
                             </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="font-medium">{booking.namaTim || '-'}</div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="font-medium">{booking.noWhatsapp || '-'}</div>
-                        </TableCell>
-                        <TableCell>
-                          <div>
-                            <div className="font-medium">{booking.user.name}</div>
-                            <div className="text-sm text-gray-500">{booking.user.email}</div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div>
-                            <div>{format(new Date(booking.startTime), "MMM d, yyyy")}</div>
-                            <div className="text-sm text-gray-500">
-                              {format(new Date(booking.startTime), "h:mm a")} - {format(new Date(booking.endTime), "h:mm a")}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="font-medium">{formatRupiah(booking.amountPaid)}</div>
-                          <div className="text-sm text-gray-500">{booking.paymentType}</div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge className={getStatusColor(booking.status)}>
-                            <div className="flex items-center gap-1">
-                              {getStatusIcon(booking.status)}
-                              {booking.status}
-                            </div>
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            {booking.status === "PENDING" && (
-                              <>
+                          </TableCell>
+                          <TableCell>
+                            <Badge className={getStatusColor(mainBooking.status)}>
+                              <div className="flex items-center gap-1">
+                                {getStatusIcon(mainBooking.status)}
+                                {mainBooking.status}
+                              </div>
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-2">
+                              {mainBooking.status === "PENDING" && (
+                                <>
+                                  <Button
+                                    size="sm"
+                                    onClick={() => handleActionClick("approve", mainBooking)}
+                                    className="bg-green-600 hover:bg-green-700"
+                                  >
+                                    Approve
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    onClick={() => handleActionClick("reject", mainBooking)}
+                                  >
+                                    Reject
+                                  </Button>
+                                </>
+                              )}
+                              {mainBooking.proofImageUrl && (
                                 <Button
                                   size="sm"
-                                  onClick={() => handleActionClick("approve", booking)}
-                                  className="bg-green-600 hover:bg-green-700"
+                                  variant="outline"
+                                  onClick={() => {
+                                    setSelectedProof(mainBooking.id)
+                                    setSelectedProofUrl(`/api/bookings/${mainBooking.id}/payment-proof/image`)
+                                  }}
                                 >
-                                  Approve
+                                  <Eye className="w-4 h-4 mr-1" />
+                                  Proof
                                 </Button>
-                                <Button
-                                  size="sm"
-                                  variant="destructive"
-                                  onClick={() => handleActionClick("reject", booking)}
-                                >
-                                  Reject
-                                </Button>
-                              </>
-                            )}
-                            {booking.proofImageUrl && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => {
-                                  setSelectedProof(booking.id)
-                                  setSelectedProofUrl(`/api/bookings/${booking.id}/payment-proof/image`)
-                                }}
-                              >
-                                <Eye className="w-4 h-4 mr-1" />
-                                Proof
-                              </Button>
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </div>
@@ -443,9 +510,10 @@ export default function EnhancedBookingsPage() {
                 <div className="flex items-center justify-between px-2 py-4">
                   <div className="flex items-center text-sm text-gray-600">
                     <span>
-                      Showing {((pagination.page - 1) * pagination.limit) + 1} to{' '}
-                      {Math.min(pagination.page * pagination.limit, pagination.total)} of{' '}
-                      {pagination.total} bookings
+                      Showing {bookingGroups.length} booking groups
+                      {bookingGroups.length !== bookings.length && (
+                        <span> ({bookings.length} total bookings)</span>
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
